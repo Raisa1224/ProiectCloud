@@ -1,16 +1,21 @@
 package com.health.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "pet_veterinary_visits")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class PetVeterinaryVisits {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "visit_id")
-    private int id;
+    private int visitId;
 
     @Column(name = "clinic")
     private String clinic;

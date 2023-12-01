@@ -1,14 +1,19 @@
 package com.health.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "pet_special_conditions")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class PetSpecialConditions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "condition_id")
-    private int id;
+    private int conditionId;
 
     @Column(name = "condition_name")
     private String name;
