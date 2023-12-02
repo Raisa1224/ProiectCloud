@@ -14,6 +14,7 @@ import lombok.*;
 public class Pet {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer petId;
 
     @Column(name = "pet_name")

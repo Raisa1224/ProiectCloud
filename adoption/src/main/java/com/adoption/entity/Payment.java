@@ -16,6 +16,7 @@ import java.util.Date;
 public class Payment {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer paymentId;
 
     @Column(name = "payment_date")

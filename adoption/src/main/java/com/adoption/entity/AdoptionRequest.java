@@ -16,6 +16,7 @@ import java.util.Date;
 public class AdoptionRequest {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer adoptionRequestId;
 
     @Column(name = "adoption_date")

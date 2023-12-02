@@ -16,6 +16,7 @@ import java.util.Date;
 public class AdoptionFeedback {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer feedbackId;
 
     @Column(name = "feedback_date")
