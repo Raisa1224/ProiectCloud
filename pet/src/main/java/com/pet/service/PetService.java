@@ -1,7 +1,10 @@
 package com.pet.service;
 
 import com.pet.entity.Pet;
+import com.pet.exceptions.BreedNotFoundException;
+import com.pet.exceptions.OwnerNotFoundException;
 import com.pet.exceptions.PetNotFoundException;
+import com.pet.exceptions.SpeciesNotFloundException;
 import com.pet.repository.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,6 +68,15 @@ public class PetService {
     }
 
     public Pet addPet(Pet pet){
+        if (pet.getSpecies() == null) {
+            throw new SpeciesNotFloundException("Species must be present");
+        }
+        if (pet.getBreed() == null) {
+            throw new BreedNotFoundException("Breed must be present");
+        }
+        if (pet.getOwner() == null) {
+            throw new OwnerNotFoundException("Owner must be present");
+        }
         return petRepository.save(pet);
     }
 
