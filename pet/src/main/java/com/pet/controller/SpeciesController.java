@@ -2,41 +2,83 @@ package com.pet.controller;
 
 import com.pet.entity.Species;
 import com.pet.service.SpeciesService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
-@RestController
+@RequiredArgsConstructor
+@Controller
 @RequestMapping("/species")
 public class SpeciesController {
 
     @Autowired
     private SpeciesService speciesService;
 
-    @GetMapping("/getAllSpecies")
-    public ResponseEntity<List<Species>> getAllSpecies(){
-        return ResponseEntity.ok(speciesService.getAllSpecies());
+    @RequestMapping("/getAllSpecies")
+    public String getAllSpecies(Model model,
+                                   @RequestParam("page") Optional<Integer> page,
+                                   @RequestParam("size") Optional<Integer> size) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(20);
+
+        Page<Species> speciesPage = speciesService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
+
+        model.addAttribute("speciesPage", speciesPage);
+
+        return "speciesList";
     }
 
-    @GetMapping("/getSpeciesById/{speciesId}")
-    public ResponseEntity<Species> getSpeciesById(@PathVariable Integer speciesId){
-        return ResponseEntity.ok(speciesService.getSpeciesById(speciesId));
+//    @GetMapping("/getSpeciesById/{speciesId}")
+//    public ResponseEntity<Species> getSpeciesById(@PathVariable Integer speciesId){
+//        return ResponseEntity.ok(speciesService.getSpeciesById(speciesId));
+//    }
+
+    @RequestMapping("/add")
+    public String addSpeciesForm(Model model) {
+        model.addAttribute("speciesAdd", new Species());
+        return "/speciesForm";
     }
 
     @PostMapping("/addSpecies")
-    public ResponseEntity<Species> addSpecies(@RequestBody Species species){
-        return ResponseEntity.ok(speciesService.addSpecies(species));
+    public String addSpecies(@ModelAttribute("speciesAdd") @Valid Species species,
+                           BindingResult result,
+                           Model model) {
+        if (result.hasErrors()) {
+            return "/speciesForm";
+        } else {
+            speciesService.addSpecies(species);
+            return "redirect:/species/getAllSpecies";
+        }
     }
 
-    @DeleteMapping("/deleteSpecies/{speciesId}")
-    public ResponseEntity<Species> deleteSpecies(@PathVariable Integer speciesId){
-        return ResponseEntity.ok(speciesService.deleteSpecies(speciesId));
+    @RequestMapping("/deleteSpecies/{speciesId}")
+    public String deleteSpecies(@PathVariable Integer speciesId){
+        speciesService.deleteSpecies(speciesId);
+        return "redirect:/species/getAllSpecies";
     }
 
-    @PutMapping("/editSpecies/{speciesId}")
-    public ResponseEntity<Species> editSpecies(@PathVariable Integer speciesId, @RequestBody Species newSpecies){
-        return ResponseEntity.ok(speciesService.editSpecies(speciesId, newSpecies));
+    @GetMapping("/edit/{speciesId}")
+    public String showEditSpeciesForm(@PathVariable("speciesId") Integer speciesId, Model model) {
+        Species species = speciesService.getSpeciesById(speciesId);
+        model.addAttribute("species", species);
+        return "speciesUpdate";
     }
+
+    @PostMapping("/editSpecies/{speciesId}")
+    public String editSpecies(@PathVariable("speciesId") Integer speciesId,
+                              @ModelAttribute Species newSpecies,
+                              Model model) {
+        Species updatedSpecies = speciesService.editSpecies(speciesId, newSpecies);
+        model.addAttribute("species", updatedSpecies);
+        return "redirect:/species/getAllSpecies";
+    }
+
 }

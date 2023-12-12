@@ -4,6 +4,8 @@ import com.pet.entity.Species;
 import com.pet.exceptions.SpeciesNotFloundException;
 import com.pet.repository.SpeciesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class SpeciesService {
+public class SpeciesService implements SpeciesServiceImpl{
 
     @Autowired
     private SpeciesRepository speciesRepository;
@@ -52,6 +54,11 @@ public class SpeciesService {
         }
         newSpecies.setSpecies_id(speciesOptional.get().getSpecies_id());
         return speciesRepository.save(newSpecies);
+    }
+
+    @Override
+    public Page<Species> findPaginated(Pageable pageable) {
+        return speciesRepository.findAll(pageable);
     }
 
 }

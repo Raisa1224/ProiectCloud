@@ -4,14 +4,16 @@ import com.pet.entity.Breed;
 import com.pet.exceptions.BreedNotFoundException;
 import com.pet.repository.BreedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class BreedService {
+public class BreedService implements BreedServiceImpl {
 
     @Autowired
     private BreedRepository breedRepository;
@@ -52,6 +54,11 @@ public class BreedService {
         }
         newBreed.setBreed_id(breedOptional.get().getBreed_id());
         return breedRepository.save(newBreed);
+    }
+
+    @Override
+    public Page<Breed> findPaginated(Pageable pageable) {
+        return breedRepository.findAll(pageable);
     }
 
 }
