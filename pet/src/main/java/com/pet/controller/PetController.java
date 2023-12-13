@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -70,10 +71,10 @@ public class PetController {
 //    }
 
 
-//    @GetMapping("/getPetById/{petId}")
-//    public ResponseEntity<Pet> getPetById(@PathVariable Integer petId){
-//        return ResponseEntity.ok(petService.getPetById(petId));
-//    }
+    @GetMapping("/getByIdPet/{petId}")
+    public ResponseEntity<Pet> getByIdPet(@PathVariable Integer petId){
+        return ResponseEntity.ok(petService.getPetById(petId));
+    }
 
     @GetMapping("/getPetById/{petId}")
     public String getPetById(@PathVariable Integer petId, Model model){
@@ -124,10 +125,10 @@ public class PetController {
         return "redirect:/pet/getAllPets";
     }
 
-//    @PutMapping("/editPet/{petId}")
-//    public ResponseEntity<Pet> editPet(@PathVariable Integer petId, @RequestBody Pet newPet){
-//        return ResponseEntity.ok(petService.editPet(petId, newPet));
-//    }
+    @PutMapping("/edit/{petId}")
+    public ResponseEntity<Pet> editPetId(@PathVariable Integer petId, @RequestBody Pet newPet){
+        return ResponseEntity.ok(petService.editPet(petId, newPet));
+    }
 
     @GetMapping("/edit/{petId}")
     public String showEditPetForm(@PathVariable("petId") Integer petId, Model model) {
