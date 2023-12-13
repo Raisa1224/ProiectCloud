@@ -1,19 +1,34 @@
 package com.adoption.controller;
 
+import com.adoption.entity.AdoptionFeedback;
 import com.adoption.entity.AdoptionRequest;
+import com.adoption.entity.Pet;
+import com.adoption.entity.User;
+import com.adoption.service.AdoptionFeedbackService;
 import com.adoption.service.AdoptionRequestService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@RestController
+@Controller
 @RequestMapping("/adoption")
 public class AdoptionRequestController {
 
     @Autowired
     private AdoptionRequestService adoptionRequestService;
+
+    @Autowired
+    private AdoptionFeedbackService adoptionFeedbackService;
 
     @GetMapping("/getAllAdoptions")
     public ResponseEntity<List<AdoptionRequest>> getAllAdoptionRequests(){
@@ -30,9 +45,9 @@ public class AdoptionRequestController {
         return ResponseEntity.ok(adoptionRequestService.getAdoptionRequestByClient(clientId));
     }
 
-    @GetMapping("/getAdoptionsByPet/{petId}")
-    public ResponseEntity<List<AdoptionRequest>> getAdoptionRequestByPet(@PathVariable Integer petId){
-        return ResponseEntity.ok(adoptionRequestService.getAdoptionRequestByPet(petId));
+    @GetMapping("/getAdoptionsByOwner/{ownerId}")
+    public ResponseEntity<List<AdoptionRequest>> getAdoptionsByOwner(@PathVariable Integer ownerId){
+        return ResponseEntity.ok(adoptionRequestService.getAdoptionRequestByOwner(ownerId));
     }
 
     @PostMapping("/addAdoption")
@@ -48,5 +63,84 @@ public class AdoptionRequestController {
     @DeleteMapping("/deleteAdoption/{adoptionId}")
     public ResponseEntity<AdoptionRequest> deleteAdoptionRequest(@PathVariable Integer adoptionId){
         return ResponseEntity.ok(adoptionRequestService.deleteAdoptionRequest(adoptionId));
+    }
+
+    @RequestMapping("/addAdoptionForm/{petId}")
+    public String addAdoptionForm(Model model, @PathVariable Integer petId) {
+        RestTemplate restTemplate = new RestTemplate();
+        String petUrl = "http://localhost:8081/pet/getByIdPet/" + petId;
+        ResponseEntity<Pet> responsePet = restTemplate.exchange(
+                petUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                });
+        AdoptionRequest adoptionRequest = new AdoptionRequest();
+        adoptionRequest.setPet(responsePet.getBody());
+        // TODO update for logged user
+        String loggedUserUrl = "http://localhost:8083/users/" + 1;
+        ResponseEntity<User> responseLoggedUser = restTemplate.exchange(
+                loggedUserUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                });
+        adoptionRequest.setClient(responseLoggedUser.getBody());
+        model.addAttribute("adoptionRequest", adoptionRequest);
+        return "/adoptionRequestTemplates/addAdoptionForm";
+    }
+
+    @PostMapping
+    public String adoptPet(@ModelAttribute("adoptionRequest") @Valid AdoptionRequest adoptionRequest,
+                           BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+            return "/adoptionRequestTemplates/addAdoptionForm";
+        }
+        try{
+            adoptionRequestService.addAdoptionRequest(adoptionRequest);
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/adoptionRequestTemplates/addAdoptionForm";
+        }
+        return "redirect:/payment/addPaymentForm/" + adoptionRequest.getAdoptionRequestId();
+    }
+
+    @GetMapping("/adoptionListAsClient")
+    public ModelAndView getAllAdoptionRequestByClient(){
+        ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/getAllAdoptedPetsForClient");
+        // TODO update for logged user
+        List<AdoptionRequest> adoptionRequestList = adoptionRequestService.getAdoptionRequestByClient(1);
+        modelAndView.addObject("adoptionRequests",adoptionRequestList);
+        return modelAndView;
+    }
+
+    @GetMapping("/{adoptionId}")
+    public ModelAndView getAdoptionDetails(@PathVariable Integer adoptionId){
+        ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/adoptionDetails");
+        AdoptionRequest adoptionRequest = adoptionRequestService.getAdoptionRequestById(adoptionId);
+        List<AdoptionFeedback> adoptionFeedbacks = adoptionFeedbackService.getFeedbacksForAdoption(adoptionId);
+        modelAndView.addObject("feedbacks",adoptionFeedbacks);
+        modelAndView.addObject("content","");
+        modelAndView.addObject("adoption", adoptionRequest);
+        return modelAndView;
+    }
+
+    @GetMapping("/adoptionListAsOwner")
+    public ModelAndView getAllAdoptionRequestByOwner(){
+        ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/getAllAdoptedPetsForOwner");
+        // TODO update for logged user
+        List<AdoptionRequest> adoptionRequestList = adoptionRequestService.getAdoptionRequestByOwner(1);
+        modelAndView.addObject("adoptionRequests",adoptionRequestList);
+        return modelAndView;
+    }
+
+    @GetMapping("/getAdoptionForOwner/{adoptionId}")
+    public ModelAndView getAdoptionForOwner(@PathVariable Integer adoptionId){
+        ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/adoptionDetailsOwner");
+        AdoptionRequest adoptionRequest = adoptionRequestService.getAdoptionRequestById(adoptionId);
+        List<AdoptionFeedback> adoptionFeedbacks = adoptionFeedbackService.getFeedbacksForAdoption(adoptionId);
+        modelAndView.addObject("feedbacks",adoptionFeedbacks);
+        modelAndView.addObject("adoption", adoptionRequest);
+        return modelAndView;
     }
 }

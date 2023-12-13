@@ -15,4 +15,7 @@ public interface AdoptionRequestRepository extends JpaRepository<AdoptionRequest
 
     @Query("SELECT ar FROM AdoptionRequest ar WHERE ar.pet.petId = :petId")
     List<AdoptionRequest> findByPetId(Integer petId);
+
+    @Query("SELECT ar FROM AdoptionRequest ar WHERE ar.pet.owner.userId = :ownerId")
+    List<AdoptionRequest> findByOwnerId(Integer ownerId);
 }
