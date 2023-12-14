@@ -38,12 +38,12 @@ public class AdoptionFeedbackService {
         return adoptionFeedbackRepository.save(adoptionFeedback);
     }
 
-    public AdoptionFeedback deleteAdoptionFeedback(Integer adoptionId){
-        Optional<AdoptionFeedback> adoptionFeedbackOptional= adoptionFeedbackRepository.findById(adoptionId);
+    public AdoptionFeedback deleteAdoptionFeedback(Integer feedbackId){
+        Optional<AdoptionFeedback> adoptionFeedbackOptional= adoptionFeedbackRepository.findById(feedbackId);
         if (adoptionFeedbackOptional.isEmpty()) {
-            throw new AdoptionNotFoundException(String.format("Adoption feedback with id %s not found", adoptionId));
+            throw new AdoptionNotFoundException(String.format("Adoption feedback with id %s not found", feedbackId));
         }
-        adoptionFeedbackRepository.deleteById(adoptionId);
+        adoptionFeedbackRepository.deleteById(feedbackId);
         return adoptionFeedbackOptional.get();
     }
 
