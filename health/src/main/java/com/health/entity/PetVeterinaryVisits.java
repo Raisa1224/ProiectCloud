@@ -30,6 +30,7 @@ public class PetVeterinaryVisits {
     private String result;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pet_id")
     private Pet pet;
 
 }

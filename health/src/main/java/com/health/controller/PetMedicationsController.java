@@ -1,11 +1,14 @@
 package com.health.controller;
 
+import com.health.entity.Pet;
 import com.health.entity.PetMedications;
 import com.health.service.PetMedicationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -30,9 +33,30 @@ public class PetMedicationsController {
         return ResponseEntity.ok(petMedicationsService.getById(medicationId));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<PetMedications> addMedication(@RequestBody PetMedications petMedications){
-        return ResponseEntity.ok(petMedicationsService.addMedication(petMedications));
+    @RequestMapping("/add/{petId}")
+    public String addMedication(Model model, @PathVariable Integer petId){
+        Pet pet = new Pet(petId);
+        PetMedications petMedications = new PetMedications();
+
+        petMedications.setPet(pet);
+        model.addAttribute("medication", petMedications);
+
+        return "/addPetMedication";
+    }
+
+    @PostMapping("")
+    public String addPetMedication(@ModelAttribute("petMedication") PetMedications petMedication,
+                                   BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+            return "/addPetMedication";
+        }
+        try{
+            petMedicationsService.addMedication(petMedication);
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/addPetMedication";
+        }
+        return "redirect:/pets" ; //metoda din controller nu din html
     }
 
     @PatchMapping("/edit/{medicationId}")

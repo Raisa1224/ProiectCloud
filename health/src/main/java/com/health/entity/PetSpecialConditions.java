@@ -26,6 +26,7 @@ public class PetSpecialConditions {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pet_id")
     private Pet pet;
 
 }

@@ -30,6 +30,7 @@ public class PetVaccinations {
     private int totalDoses;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pet_id")
     private Pet pet;
 
 }

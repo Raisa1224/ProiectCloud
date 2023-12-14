@@ -36,6 +36,9 @@ public class PetSpecialConditionsService {
 
     @Transactional
     public PetSpecialConditions addCondition(PetSpecialConditions petSpecialConditions){
+        System.out.println(petSpecialConditions.getPet());
+        System.out.println(petSpecialConditions);
+        //search the pet in the db and return error if it doesn't exist
         return petSpecialConditionsRepository.save(petSpecialConditions);
     }
 

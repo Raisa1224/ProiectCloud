@@ -14,5 +14,4 @@ public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int petId;
-
 }

@@ -1,10 +1,13 @@
 package com.health.controller;
 
+import com.health.entity.Pet;
 import com.health.entity.PetSpecialConditions;
 import com.health.service.PetSpecialConditionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,9 +29,36 @@ public class PetSpecialConditionsController {
         return ResponseEntity.ok(petSpecialConditionsService.getById(conditionId));
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<PetSpecialConditions> addCondition(@RequestBody PetSpecialConditions petSpecialConditions){
+    @PostMapping("condition/add")
+    public ResponseEntity<PetSpecialConditions> addConditionBE(@RequestBody PetSpecialConditions petSpecialConditions){
         return ResponseEntity.ok(petSpecialConditionsService.addCondition(petSpecialConditions));
+    }
+    @RequestMapping("/add/{petId}")
+    public String addCondition(Model model, @PathVariable Integer petId){
+        Pet pet = new Pet(petId);
+        PetSpecialConditions petSpecialConditions = new PetSpecialConditions();
+
+        petSpecialConditions.setPet(pet);
+        System.out.println(petSpecialConditions);
+        model.addAttribute("condition", petSpecialConditions);
+
+        return "/addPetSpecialCondition";
+    }
+
+    @PostMapping("")
+    public String addSpecialCondition(@ModelAttribute("condition") PetSpecialConditions petSpecialConditions,
+                                   BindingResult bindingResult, Model model){
+        System.out.println(petSpecialConditions);
+        if (bindingResult.hasErrors()) {
+            return "/addPetSpecialCondition";
+        }
+        try{
+            petSpecialConditionsService.addCondition(petSpecialConditions);
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/addPetSpecialCondition";
+        }
+        return "redirect:/pets" ; //metoda din controller nu din html
     }
 
     @PatchMapping("/edit/{conditionId}")

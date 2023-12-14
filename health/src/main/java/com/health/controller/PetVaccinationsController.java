@@ -1,10 +1,14 @@
 package com.health.controller;
 
+import com.health.entity.Pet;
+import com.health.entity.PetSpecialConditions;
 import com.health.entity.PetVaccinations;
 import com.health.service.PetVaccinationsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +34,35 @@ public class PetVaccinationsController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<PetVaccinations> addVaccination(@RequestBody PetVaccinations petVaccinations){
+    public ResponseEntity<PetVaccinations> addVaccinationBE(@RequestBody PetVaccinations petVaccinations){
         return ResponseEntity.ok(petVaccinationsService.addVaccination(petVaccinations));
+    }
+    @RequestMapping("/add/{petId}")
+    public String addVaccination(Model model, @PathVariable Integer petId){
+        Pet pet = new Pet(petId);
+        PetVaccinations petVaccinations = new PetVaccinations();
+
+        petVaccinations.setPet(pet);
+        System.out.println(petVaccinations);
+        model.addAttribute("vaccination", petVaccinations);
+
+        return "/addPetVaccination";
+    }
+
+    @PostMapping("")
+    public String addPetVaccination(@ModelAttribute("vaccination") PetVaccinations petVaccinations,
+                                      BindingResult bindingResult, Model model){
+        System.out.println(petVaccinations);
+        if (bindingResult.hasErrors()) {
+            return "/addPetVaccination";
+        }
+        try{
+            petVaccinationsService.addVaccination(petVaccinations);
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/addPetVaccination";
+        }
+        return "redirect:/pets" ; //metoda din controller nu din html
     }
 
     @PatchMapping("/edit/{vaccinationId}")

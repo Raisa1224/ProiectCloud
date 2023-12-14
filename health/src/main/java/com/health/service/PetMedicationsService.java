@@ -1,5 +1,6 @@
 package com.health.service;
 
+import com.health.entity.Pet;
 import com.health.entity.PetMedications;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetMedicationsRepository;
@@ -44,6 +45,8 @@ public class PetMedicationsService {
 
     @Transactional
     public PetMedications addMedication(PetMedications petMedications){
+        System.out.println(petMedications.getPet());
+        //search the pet in the db and return error if it doesn't exist
         return petMedicationsRepository.save(petMedications);
     }
 
