@@ -1,5 +1,6 @@
 package com.health.service;
 
+import com.health.entity.PetSpecialConditions;
 import com.health.entity.PetVaccinations;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetVaccinationsRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,16 +51,15 @@ public class PetVaccinationsService {
     }
 
     @Transactional
-    public PetVaccinations editVaccination(Integer vaccinationId, PetVaccinations petVaccinations){
-        Optional<PetVaccinations> oldVaccination = petVaccinationsRepository.findById(vaccinationId);
-        if(oldVaccination.isPresent()){
-            petVaccinationsRepository.deleteById(vaccinationId);
-            petVaccinationsRepository.save(petVaccinations);
+    public PetVaccinations editVaccination(Integer vaccinationId, String name, Date date, Integer dose, Integer totalDoses){
+        Optional<PetVaccinations> old = petVaccinationsRepository.findById(vaccinationId);
+        if(old.isPresent()){
+            petVaccinationsRepository.editVaccination(vaccinationId, name, date, dose, totalDoses);
         }
         else{
             throw new NoEntityFoundException("NO ENTITY FOUND");
         }
-        return petVaccinations;
+        return old.get();
     }
 
     @Transactional

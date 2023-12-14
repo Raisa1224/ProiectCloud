@@ -1,5 +1,6 @@
 package com.health.service;
 
+import com.health.entity.PetSpecialConditions;
 import com.health.entity.PetVeterinaryVisits;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetVeterinaryVisitsRepository;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,16 +42,15 @@ public class PetVeterinaryVisitsService {
     }
 
     @Transactional
-    public PetVeterinaryVisits editVisit(Integer visitId, PetVeterinaryVisits petVeterinaryVisits){
-        Optional<PetVeterinaryVisits> oldPetVeterinaryVisit = petVeterinaryVisitsRepository.findById(visitId);
-        if(oldPetVeterinaryVisit.isPresent()){
-            petVeterinaryVisitsRepository.deleteById(visitId);
-            petVeterinaryVisitsRepository.save(petVeterinaryVisits);
+    public PetVeterinaryVisits editVisit(Integer visitId, String clinic, Date date, String cause, String result){
+        Optional<PetVeterinaryVisits> old = petVeterinaryVisitsRepository.findById(visitId);
+        if(old.isPresent()){
+            petVeterinaryVisitsRepository.editVeterinaryVisit(visitId, clinic, date, cause, result);
         }
         else{
             throw new NoEntityFoundException("NO ENTITY FOUND");
         }
-        return petVeterinaryVisits;
+        return old.get();
     }
 
     @Transactional

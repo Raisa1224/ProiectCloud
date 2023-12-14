@@ -36,7 +36,6 @@ public class PetMedicationsService {
     @Transactional
     public PetMedications getById(Integer medicationId){
         Optional<PetMedications> petMedications = petMedicationsRepository.findById(medicationId);
-        System.out.println(petMedications.get());
         if(petMedications.isPresent()){
             return  petMedications.get();
         }
@@ -51,16 +50,15 @@ public class PetMedicationsService {
     }
 
     @Transactional
-    public PetMedications editMedication(Integer medication, PetMedications petMedications){
+    public PetMedications editMedication(Integer medication, Integer dosage, Integer frequencyDays, String name, String reason, String observations){
         Optional<PetMedications> oldMedication = petMedicationsRepository.findById(medication);
         if(oldMedication.isPresent()){
-            petMedicationsRepository.deleteById(medication);
-            petMedicationsRepository.save(petMedications);
+            petMedicationsRepository.editMedication(medication, dosage, frequencyDays, name, reason, observations);
         }
         else{
             throw new NoEntityFoundException("NO ENTITY FOUND");
         }
-        return petMedications;
+        return oldMedication.get();
     }
 
     @Transactional

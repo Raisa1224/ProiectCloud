@@ -59,10 +59,47 @@ public class PetMedicationsController {
         return "redirect:/pets" ; //metoda din controller nu din html
     }
 
-    @PatchMapping("/edit/{medicationId}")
-    public ResponseEntity<PetMedications> editMedication(@PathVariable Integer medicationId, @RequestBody PetMedications petMedications){
-        return ResponseEntity.ok(petMedicationsService.editMedication(medicationId, petMedications));
+    @PatchMapping("/editMedicationBE/{medicationId}")
+    public ResponseEntity<PetMedications> editMedicationBE(@PathVariable Integer medicationId, @RequestBody PetMedications petMedications){
+        return ResponseEntity.ok(petMedicationsService.editMedication(medicationId, petMedications.getDosage(), petMedications.getFrequencyDays(), petMedications.getName(), petMedications.getReason(), petMedications.getObservations()));
     }
+
+    @RequestMapping("/edit/{medicationId}")
+    public String medicationEditForm(Model model, @PathVariable Integer medicationId) {
+
+        PetMedications petMedications = petMedicationsService.getById(medicationId);
+
+        System.out.println("IN FIRST EDIT METHOD:"+ petMedications);
+
+        model.addAttribute("medication", petMedications);
+
+        return "/editPetMedication";
+    }
+
+
+    @PostMapping("/editMedication/{medicationId}")
+    public String editMedication(@PathVariable Integer medicationId ,
+                                 @ModelAttribute("medication") PetMedications petMedication,
+                                 BindingResult bindingResult){
+
+        PetMedications old = petMedicationsService.getById(medicationId);
+        petMedication.setMedicationId(old.getMedicationId());
+        petMedication.setPet(old.getPet());
+
+        System.out.println("IN FIRST EDIT METHOD:"+ petMedication);
+        if (bindingResult.hasErrors()) {
+            return "/editPetMedication";
+        }
+        try{
+            petMedicationsService.editMedication(medicationId, petMedication.getDosage(), petMedication.getFrequencyDays(), petMedication.getName(), petMedication.getReason(), petMedication.getObservations());
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/editPetMedication";
+        }
+        return "redirect:/pets" ; //metoda din controller nu din html
+
+    }
+
 
     @DeleteMapping("/delete/{medicationId}")
     public ResponseEntity<PetMedications> deleteMedication(@PathVariable Integer medicationId){

@@ -65,9 +65,45 @@ public class PetVeterinaryVisitsController {
         return "redirect:/pets" ; //metoda din controller nu din html
     }
 
-    @PatchMapping("/edit/{visitId}")
-    public ResponseEntity<PetVeterinaryVisits> editVeterinaryVisit(@PathVariable Integer visitId, @RequestBody PetVeterinaryVisits petVeterinaryVisits){
-        return ResponseEntity.ok(petVeterinaryVisitsService.editVisit(visitId, petVeterinaryVisits));
+    @PatchMapping("/editBE/{visitId}")
+    public ResponseEntity<PetVeterinaryVisits> editVeterinaryVisitBE(@PathVariable Integer visitId, @RequestBody PetVeterinaryVisits petVeterinaryVisits){
+        return ResponseEntity.ok(petVeterinaryVisitsService.editVisit(visitId, petVeterinaryVisits.getClinic(), petVeterinaryVisits.getDate(), petVeterinaryVisits.getCause(), petVeterinaryVisits.getResult()));
+    }
+
+    @RequestMapping("/edit/{visitId}")
+    public String veterinaryVisitEditForm(Model model, @PathVariable Integer visitId) {
+
+        PetVeterinaryVisits petVeterinaryVisits = petVeterinaryVisitsService.getById(visitId);
+
+        System.out.println("IN FIRST EDIT METHOD:"+ petVeterinaryVisits);
+
+        model.addAttribute("veterinaryvisit", petVeterinaryVisits);
+
+        return "/editPetVeterinaryVisit";
+    }
+
+
+    @PostMapping("/editVeterinaryVisit/{visitId}")
+    public String editVeterinaryVisit(@PathVariable Integer visitId ,
+                                  @ModelAttribute("veterinaryvisit") PetVeterinaryVisits petVeterinaryVisits,
+                                  BindingResult bindingResult){
+
+        PetVeterinaryVisits old = petVeterinaryVisitsService.getById(visitId);
+        petVeterinaryVisits.setVisitId(old.getVisitId());
+        petVeterinaryVisits.setPet(old.getPet());
+
+        System.out.println("IN FIRST EDIT METHOD:"+ petVeterinaryVisits);
+        if (bindingResult.hasErrors()) {
+            return "/editPetVeterinaryVisit";
+        }
+        try{
+            petVeterinaryVisitsService.editVisit(visitId, petVeterinaryVisits.getClinic(), petVeterinaryVisits.getDate(), petVeterinaryVisits.getCause(), petVeterinaryVisits.getResult());
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/editPetVeterinaryVisit";
+        }
+        return "redirect:/pets" ; //metoda din controller nu din html
+
     }
 
     @DeleteMapping("/delete/{visitId}")

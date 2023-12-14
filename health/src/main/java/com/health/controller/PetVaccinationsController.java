@@ -65,9 +65,45 @@ public class PetVaccinationsController {
         return "redirect:/pets" ; //metoda din controller nu din html
     }
 
-    @PatchMapping("/edit/{vaccinationId}")
-    public ResponseEntity<PetVaccinations> editVaccination(@PathVariable Integer vaccinationId, @RequestBody PetVaccinations petVaccinations){
-        return ResponseEntity.ok(petVaccinationsService.editVaccination(vaccinationId, petVaccinations));
+    @PatchMapping("/editBE/{vaccinationId}")
+    public ResponseEntity<PetVaccinations> editVaccinationBE(@PathVariable Integer vaccinationId, @RequestBody PetVaccinations petVaccinations){
+        return ResponseEntity.ok(petVaccinationsService.editVaccination(vaccinationId, petVaccinations.getName(), petVaccinations.getDate(), petVaccinations.getDose(), petVaccinations.getTotalDoses()));
+    }
+
+    @RequestMapping("/edit/{vaccinationId}")
+    public String vaccinationEditForm(Model model, @PathVariable Integer vaccinationId) {
+
+        PetVaccinations petVaccinations = petVaccinationsService.getById(vaccinationId);
+
+        System.out.println("IN FIRST EDIT METHOD:"+ petVaccinations);
+
+        model.addAttribute("vaccination", petVaccinations);
+
+        return "/editPetVaccination";
+    }
+
+
+    @PostMapping("/editVaccination/{vaccinationId}")
+    public String editVaccination(@PathVariable Integer vaccinationId ,
+                                @ModelAttribute("vaccination") PetVaccinations petVaccinations,
+                                BindingResult bindingResult){
+
+        PetVaccinations old = petVaccinationsService.getById(vaccinationId);
+        petVaccinations.setVaccinationId(old.getVaccinationId());
+        petVaccinations.setPet(old.getPet());
+
+        System.out.println("IN FIRST EDIT METHOD:"+ petVaccinations);
+        if (bindingResult.hasErrors()) {
+            return "/editPetVaccination";
+        }
+        try{
+            petVaccinationsService.editVaccination(vaccinationId, petVaccinations.getName(), petVaccinations.getDate(), petVaccinations.getDose(), petVaccinations.getTotalDoses());
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/editPetVaccination";
+        }
+        return "redirect:/pets" ; //metoda din controller nu din html
+
     }
 
     @DeleteMapping("/delete/{vaccinationId}")

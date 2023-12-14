@@ -1,5 +1,6 @@
 package com.health.service;
 
+import com.health.entity.PetMedications;
 import com.health.entity.PetSpecialConditions;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetSpecialConditionsRepository;
@@ -43,16 +44,15 @@ public class PetSpecialConditionsService {
     }
 
     @Transactional
-    public PetSpecialConditions editCondition(Integer conditionId, PetSpecialConditions petSpecialConditions){
-        Optional<PetSpecialConditions> oldCondition = petSpecialConditionsRepository.findById(conditionId);
-        if(oldCondition.isPresent()){
-            petSpecialConditionsRepository.deleteById(conditionId);
-            petSpecialConditionsRepository.save(petSpecialConditions);
+    public PetSpecialConditions editCondition(Integer conditionId, String name, String description, String observations){
+        Optional<PetSpecialConditions> old = petSpecialConditionsRepository.findById(conditionId);
+        if(old.isPresent()){
+            petSpecialConditionsRepository.editSpecialCondition(conditionId, name, description, observations);
         }
         else{
             throw new NoEntityFoundException("NO ENTITY FOUND");
         }
-        return petSpecialConditions;
+        return old.get();
     }
 
     @Transactional

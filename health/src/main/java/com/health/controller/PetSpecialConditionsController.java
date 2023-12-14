@@ -1,6 +1,7 @@
 package com.health.controller;
 
 import com.health.entity.Pet;
+import com.health.entity.PetMedications;
 import com.health.entity.PetSpecialConditions;
 import com.health.service.PetSpecialConditionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,9 +62,45 @@ public class PetSpecialConditionsController {
         return "redirect:/pets" ; //metoda din controller nu din html
     }
 
-    @PatchMapping("/edit/{conditionId}")
-    public ResponseEntity<PetSpecialConditions> editCondition(@PathVariable Integer conditionId, @RequestBody PetSpecialConditions petSpecialConditions){
-        return ResponseEntity.ok(petSpecialConditionsService.editCondition(conditionId, petSpecialConditions));
+    @PatchMapping("/editBE/{conditionId}")
+    public ResponseEntity<PetSpecialConditions> editConditionBE(@PathVariable Integer conditionId, @RequestBody PetSpecialConditions petSpecialConditions){
+        return ResponseEntity.ok(petSpecialConditionsService.editCondition(conditionId, petSpecialConditions.getName(), petSpecialConditions.getDescription(), petSpecialConditions.getObservations()));
+    }
+
+    @RequestMapping("/edit/{conditionId}")
+    public String conditionEditForm(Model model, @PathVariable Integer conditionId) {
+
+        PetSpecialConditions petSpecialConditions = petSpecialConditionsService.getById(conditionId);
+
+        System.out.println("IN FIRST EDIT METHOD:"+ petSpecialConditions);
+
+        model.addAttribute("condition", petSpecialConditions);
+
+        return "/editPetSpecialCondition";
+    }
+
+
+    @PostMapping("/editCondition/{conditionId}")
+    public String editCondition(@PathVariable Integer conditionId ,
+                                 @ModelAttribute("condition") PetSpecialConditions petSpecialConditions,
+                                 BindingResult bindingResult){
+
+        PetSpecialConditions old = petSpecialConditionsService.getById(conditionId);
+        petSpecialConditions.setConditionId(old.getConditionId());
+        petSpecialConditions.setPet(old.getPet());
+
+        System.out.println("IN FIRST EDIT METHOD:"+ petSpecialConditions);
+        if (bindingResult.hasErrors()) {
+            return "/editPetSpecialCondition";
+        }
+        try{
+            petSpecialConditionsService.editCondition(conditionId, petSpecialConditions.getName(), petSpecialConditions.getDescription(), petSpecialConditions.getObservations());
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/editPetSpecialCondition";
+        }
+        return "redirect:/pets" ; //metoda din controller nu din html
+
     }
 
     @DeleteMapping("/delete/{conditionId}")
