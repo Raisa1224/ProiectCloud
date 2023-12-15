@@ -1,20 +1,26 @@
 package com.pet.controller;
 
 import com.pet.entity.Pet;
+import com.pet.entity.User;
 import com.pet.service.BreedService;
 import com.pet.service.PetService;
 import com.pet.service.SpeciesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -31,10 +37,8 @@ public class PetController {
     @Autowired
     private SpeciesService speciesService;
 
-//    @GetMapping("/getAllPets")
-//    public ResponseEntity<List<Pet>> getAllPets(){
-//        return ResponseEntity.ok(petService.getAllPets());
-//    }
+    @Autowired
+    private RestTemplate restTemplate;
 
     @RequestMapping("/getAllPets")
     public String getAllPets(Model model,
@@ -85,27 +89,48 @@ public class PetController {
         return "petDetails";
     }
 
-//    @PostMapping("/addPet")
-//    public ResponseEntity<Pet> addPet(@RequestBody Pet pet){
-//        return ResponseEntity.ok(petService.addPet(pet));
-//    }
-
     @RequestMapping("/add")
     public String addPetForm(Model model) {
         model.addAttribute("petAdd", new Pet());
         model.addAttribute("species", speciesService.getAllSpecies());
         model.addAttribute("breed", breedService.getAllBreeds());
-        //user service for add
+        //user for add
+        RestTemplate restTemplate = new RestTemplate();
+        String userUrlLogged = "http://localhost:8083/users/" + 2;
+        ResponseEntity<User> loggedUser = restTemplate.exchange(
+                userUrlLogged,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        Pet pet = new Pet();
+        pet.setOwner(loggedUser.getBody());
+        model.addAttribute("pet",pet);
+
         return "/petForm";
     }
 
-    @PostMapping("/addSpecies")
+    @PostMapping("/addPet")
     public String addPet(@ModelAttribute("petAdd") @Valid Pet pet,
                              BindingResult result,
                              Model model) {
         model.addAttribute("species", speciesService.getAllSpecies());
         model.addAttribute("breed", breedService.getAllBreeds());
-        // user service for add
+
+        //user for add
+        RestTemplate restTemplate = new RestTemplate();
+        String userUrlLogged = "http://localhost:8083/users/" + 1;
+        ResponseEntity<User> loggedUser = restTemplate.exchange(
+                userUrlLogged,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        pet.setOwner(loggedUser.getBody());
+        model.addAttribute("pet",pet);
+
         if (result.hasErrors()) {
             return "/petForm";
         } else {
@@ -114,24 +139,24 @@ public class PetController {
         }
     }
 
-//    @DeleteMapping("/deletePet/{petId}")
-//    public ResponseEntity<Pet> deletePet(@PathVariable Integer petId){
-//        return ResponseEntity.ok(petService.deletePet(petId));
-//    }
-
     @RequestMapping("/deletePet/{petId}")
     public String deletePet(@PathVariable Integer petId){
         petService.deletePet(petId);
         return "redirect:/pet/getAllPets";
     }
 
-    @PutMapping("/edit/{petId}")
+    @PutMapping("/editPetId/{petId}")
     public ResponseEntity<Pet> editPetId(@PathVariable Integer petId, @RequestBody Pet newPet){
         return ResponseEntity.ok(petService.editPet(petId, newPet));
     }
 
+    @PatchMapping("/editFE/{petId}")
+    public ResponseEntity<Pet> editPetFE(@PathVariable Integer petId, @RequestBody Pet pet){
+        return ResponseEntity.ok(petService.editPetFE(petId, pet.getPetName(), pet.getYearOfBirth(), pet.getGender(), pet.getColor(), pet.getPrice(), pet.getAvailable()));
+    }
+
     @GetMapping("/edit/{petId}")
-    public String showEditPetForm(@PathVariable("petId") Integer petId, Model model) {
+    public String showEditPetForm(@PathVariable Integer petId, Model model) {
         Pet pet = petService.getPetById(petId);
         model.addAttribute("pet", pet);
         return "petUpdate";
@@ -140,10 +165,25 @@ public class PetController {
     // functionality must be checked
     @PostMapping("/editPet/{petId}")
     public String editPet(@PathVariable("petId") Integer petId,
-                              @ModelAttribute Pet newPet,
-                              Model model) {
-        Pet updatedPet = petService.editPet(petId, newPet);
-        model.addAttribute("pet", updatedPet);
+                              @ModelAttribute("pet") Pet pet,
+                          BindingResult bindingResult) {
+
+        Pet old = petService.getPetById(petId);
+        pet.setPetId(old.getPetId());
+        pet.setSpecies(old.getSpecies());
+        pet.setBreed(old.getBreed());
+        pet.setOwner(old.getOwner());
+
+        if (bindingResult.hasErrors()) {
+            return "petUpdate";
+        }
+
+        try{
+            petService.editPetFE(petId, pet.getPetName(), pet.getYearOfBirth(), pet.getGender(), pet.getColor(), pet.getPrice(), pet.getAvailable());
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "petUpdate";
+        }
         return "redirect:/pet/getAllPets";
     }
 }
