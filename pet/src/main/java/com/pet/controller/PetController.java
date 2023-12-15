@@ -83,9 +83,9 @@ public class PetController {
     @GetMapping("/getPetById/{petId}")
     public String getPetById(@PathVariable Integer petId, Model model){
 
-        Pet pet = petService.getPetById(petId);
+        Pet idPet = petService.getPetById(petId);
         model.addAttribute("getPet",
-                petId);
+                idPet);
         return "petDetails";
     }
 

@@ -1,10 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pet details</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+
+
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto topnav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/pet/getAllPets'}">Pets</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/species/getAllSpecies'}">Species</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{'/breed/getAllBreeds'}">Breeds</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
 </head>
 <body>
+
+<div class="container " style="margin-top: 50px">
+    <div class="row align-self-center">
+        <div class="col-md-10 col-md-offset-3">
+            <div class="pannel-group">
+                <div class="panel pnel-primary">
+                    <div class="panel-heading" >
+                        <h1 class="panel-title" th:text="${getPet.petName}"></h1>
+                        <h6 class="panel-title" th:text="${'Species: ' + getPet.species.speciesName}"></h6>
+                        <h6 class="panel-title" th:text="${'Breed: ' + getPet.breed.breedName}"></h6>
+                        <h6 class="panel-title" th:text="${'Owner: ' + getPet.owner.firstname + ' ' + getPet.owner.lastname}"></h6>
+                        <br>
+                    </div>
+                    <br><h4 th:text="${'Pet Health Overview'}"></h4>
+                    <p>
+                        <span th:text="${'Welcome to our Pet Details page, where we prioritize the well-being of your beloved companion. At '}"></span>
+                        <b th:text="${getPet.petName}"></b>
+                        <span th:text="${' personal health hub, we aim to provide you with a comprehensive insight into their medical journey.'}"></span>
+                    </p>
+                    <p style="color: limegreen"> Here we will have the table</p>
+                    <br>
+                    <br><h4 th:text="${'Vaccination Chronicle'}"></h4>
+                    <p>
+                        <span th:text="${'Ensuring the optimal health of '}"></span>
+                        <b th:text="${getPet.petName}"></b>
+                        <span th:text="${', we have diligently maintained a record of vaccinations administered over time. From core vaccines safeguarding against common diseases to tailored preventive measures, each vaccine plays a crucial role in their ongoing health.'}"></span>
+                    </p></p>
+                    <p style="color: limegreen"> Here we will have the table</p>
+                    <br>
+                    <br><h4 th:text="${'Medication Records'}"></h4>
+                    <p>
+                        <span th:text="${'In '}"></span>
+                        <b th:text="${getPet.petName}"></b>
+                        <span th:text="${' journey towards a healthy and happy life, we have maintained meticulous records of any prescribed medications. Whether addressing minor ailments or managing chronic conditions, every dose has been carefully documented to keep you informed about your pet healthcare regimen.'}"></span>
+                    </p></p>
+                    <p style="color: limegreen"> Here we will have the table</p>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
