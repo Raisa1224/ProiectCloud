@@ -60,7 +60,7 @@ public class AdoptionRequestService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Pet> requestEntity = new HttpEntity<>(newPet, headers);
-        String petUrl = "http://localhost:8081/pet/edit/" + adoptionRequest.getPet().getPetId();
+        String petUrl = "http://localhost:8081/pet/editPetId/" + adoptionRequest.getPet().getPetId();
         ResponseEntity<Pet> editedPet = restTemplate.exchange(
                 petUrl,
                 HttpMethod.PUT,

@@ -74,6 +74,6 @@ public class PaymentController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/paymentTemplates/addPaymentForm";
         }
-        return "redirect:/adoptionListAsClient";
+        return "redirect:/adoption/adoptionListAsClient";
     }
 }
