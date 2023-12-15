@@ -54,7 +54,7 @@ public class PetVeterinaryVisitsService {
     }
 
     @Transactional
-    public PetVeterinaryVisits deleteVisit(Integer visitId){
+    public Integer deleteVisit(Integer visitId){
         Optional<PetVeterinaryVisits> oldPetVeterinaryVisit = petVeterinaryVisitsRepository.findById(visitId);
         if(oldPetVeterinaryVisit.isPresent()){
             petVeterinaryVisitsRepository.deleteById(visitId);
@@ -62,6 +62,6 @@ public class PetVeterinaryVisitsService {
         else{
             throw new NoEntityFoundException("NO ENTITY FOUND");
         }
-        return oldPetVeterinaryVisit.get();
+        return oldPetVeterinaryVisit.get().getPet().getPetId();
     }
 }

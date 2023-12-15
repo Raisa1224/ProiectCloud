@@ -1,8 +1,10 @@
 package com.health.controller;
 
+import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetMedications;
 import com.health.service.PetMedicationsService;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,14 +20,18 @@ public class PetMedicationsController {
     @Autowired
     PetMedicationsService petMedicationsService;
 
+
     @GetMapping
     public ResponseEntity<List<PetMedications>> getAllMedications(){
         return ResponseEntity.ok(petMedicationsService.getAll());
     }
     @GetMapping("/{petId}")
-    public ResponseEntity<List<PetMedications>> getMedicationsForPet(@PathVariable Integer petId){
+    public String getMedicationsForPet(Model model, @PathVariable Integer petId){
         List<PetMedications> petMedications = petMedicationsService.getAllMedicationsForPet(petId);
-        return ResponseEntity.ok(petMedications);
+
+        model.addAttribute("medications", petMedications);
+
+        return "/getAllPetMedicationsForPet";
     }
 
     @GetMapping("/medication/{medicationId}")
@@ -56,7 +62,7 @@ public class PetMedicationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetMedication";
         }
-        return "redirect:/pets" ; //metoda din controller nu din html
+        return "redirect:" + Constants.GET_ALL_PETS_URL ; //metoda din controller nu din html
     }
 
     @PatchMapping("/editMedicationBE/{medicationId}")
@@ -96,13 +102,16 @@ public class PetMedicationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetMedication";
         }
-        return "redirect:/pets" ; //metoda din controller nu din html
+        return "redirect:" + Constants.GET_ALL_PETS_URL; //metoda din controller nu din html
 
     }
 
 
-    @DeleteMapping("/delete/{medicationId}")
-    public ResponseEntity<PetMedications> deleteMedication(@PathVariable Integer medicationId){
-        return ResponseEntity.ok(petMedicationsService.deleteMedication(medicationId));
+    @RequestMapping("/delete/{medicationId}")
+    public String deleteMedication(@PathVariable Integer medicationId){
+        Integer petId = petMedicationsService.deleteMedication(medicationId);
+        System.out.println(petId);
+        //get pet by id
+        return "redirect:" + Constants.GET_PET_BY_ID_URL + petId;
     }
 }

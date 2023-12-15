@@ -56,7 +56,7 @@ public class PetSpecialConditionsService {
     }
 
     @Transactional
-    public PetSpecialConditions deleteCondition(Integer conditionId){
+    public Integer deleteCondition(Integer conditionId){
         Optional<PetSpecialConditions> oldCondition = petSpecialConditionsRepository.findById(conditionId);
         if(oldCondition.isPresent()){
             petSpecialConditionsRepository.deleteById(conditionId);
@@ -64,7 +64,7 @@ public class PetSpecialConditionsService {
         else{
             throw new NoEntityFoundException("NO ENTITY FOUND");
         }
-        return oldCondition.get();
+        return oldCondition.get().getPet().getPetId();
     }
 
 }

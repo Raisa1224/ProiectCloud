@@ -1,5 +1,6 @@
 package com.health.controller;
 
+import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetMedications;
 import com.health.entity.PetSpecialConditions;
@@ -59,7 +60,7 @@ public class PetSpecialConditionsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetSpecialCondition";
         }
-        return "redirect:/pets" ; //metoda din controller nu din html
+        return "redirect:" + Constants.GET_ALL_PETS_URL; //metoda din controller nu din html
     }
 
     @PatchMapping("/editBE/{conditionId}")
@@ -71,8 +72,6 @@ public class PetSpecialConditionsController {
     public String conditionEditForm(Model model, @PathVariable Integer conditionId) {
 
         PetSpecialConditions petSpecialConditions = petSpecialConditionsService.getById(conditionId);
-
-        System.out.println("IN FIRST EDIT METHOD:"+ petSpecialConditions);
 
         model.addAttribute("condition", petSpecialConditions);
 
@@ -99,12 +98,15 @@ public class PetSpecialConditionsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetSpecialCondition";
         }
-        return "redirect:/pets" ; //metoda din controller nu din html
+        return "redirect:" + Constants.GET_ALL_PETS_URL ; //metoda din controller nu din html
 
     }
 
-    @DeleteMapping("/delete/{conditionId}")
-    public ResponseEntity<PetSpecialConditions> deleteCondition(@PathVariable Integer conditionId){
-        return ResponseEntity.ok(petSpecialConditionsService.deleteCondition(conditionId));
+    @RequestMapping("/delete/{conditionId}")
+    public String deleteCondition(@PathVariable Integer conditionId){
+        Integer petId = petSpecialConditionsService.deleteCondition(conditionId);
+        System.out.println(petId);
+        //get pet by id
+        return "redirect:" + Constants.GET_PET_BY_ID_URL + petId;
     }
 }

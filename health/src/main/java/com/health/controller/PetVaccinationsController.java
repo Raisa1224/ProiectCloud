@@ -1,5 +1,6 @@
 package com.health.controller;
 
+import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetSpecialConditions;
 import com.health.entity.PetVaccinations;
@@ -62,7 +63,7 @@ public class PetVaccinationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetVaccination";
         }
-        return "redirect:/pets" ; //metoda din controller nu din html
+        return "redirect:" + Constants.GET_ALL_PETS_URL; //metoda din controller nu din html
     }
 
     @PatchMapping("/editBE/{vaccinationId}")
@@ -102,12 +103,15 @@ public class PetVaccinationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetVaccination";
         }
-        return "redirect:/pets" ; //metoda din controller nu din html
+        return "redirect:" + Constants.GET_ALL_PETS_URL ; //metoda din controller nu din html
 
     }
 
-    @DeleteMapping("/delete/{vaccinationId}")
-    public ResponseEntity<PetVaccinations> deleteVaccination(@PathVariable Integer vaccinationId){
-        return ResponseEntity.ok(petVaccinationsService.deleteVaccination(vaccinationId));
+    @RequestMapping("/delete/{vaccinationId}")
+    public String deleteVaccination(@PathVariable Integer vaccinationId){
+        Integer petId = petVaccinationsService.deleteVaccination(vaccinationId);
+        System.out.println(petId);
+        //get pet by id
+        return "redirect:" + Constants.GET_PET_BY_ID_URL + petId;
     }
 }

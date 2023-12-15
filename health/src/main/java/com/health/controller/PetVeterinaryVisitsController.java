@@ -1,10 +1,12 @@
 package com.health.controller;
 
+import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetVaccinations;
 import com.health.entity.PetVeterinaryVisits;
 import com.health.service.PetMedicationsService;
 import com.health.service.PetVeterinaryVisitsService;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -62,7 +64,7 @@ public class PetVeterinaryVisitsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetVeterinaryVisit";
         }
-        return "redirect:/pets" ; //metoda din controller nu din html
+        return "redirect:" + Constants.GET_ALL_PETS_URL; //metoda din controller nu din html
     }
 
     @PatchMapping("/editBE/{visitId}")
@@ -102,12 +104,15 @@ public class PetVeterinaryVisitsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetVeterinaryVisit";
         }
-        return "redirect:/pets" ; //metoda din controller nu din html
+        return "redirect:" + Constants.GET_ALL_PETS_URL ; //metoda din controller nu din html
 
     }
 
-    @DeleteMapping("/delete/{visitId}")
-    public ResponseEntity<PetVeterinaryVisits> deleteVeterinaryVisit(@PathVariable Integer visitId){
-        return ResponseEntity.ok(petVeterinaryVisitsService.deleteVisit(visitId));
+    @RequestMapping("/delete/{visitId}")
+    public String deleteVeterinaryVisit(@PathVariable Integer visitId){
+        Integer petId = petVeterinaryVisitsService.deleteVisit(visitId);
+        System.out.println(petId);
+        //get pet by id
+        return "redirect:" + Constants.GET_PET_BY_ID_URL + petId;
     }
 }

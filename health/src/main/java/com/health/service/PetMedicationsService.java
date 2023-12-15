@@ -1,6 +1,5 @@
 package com.health.service;
 
-import com.health.entity.Pet;
 import com.health.entity.PetMedications;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetMedicationsRepository;
@@ -62,7 +61,7 @@ public class PetMedicationsService {
     }
 
     @Transactional
-    public PetMedications deleteMedication(Integer medicationId){
+    public Integer deleteMedication(Integer medicationId){
         Optional<PetMedications> oldMedication = petMedicationsRepository.findById(medicationId);
         if(oldMedication.isPresent()){
             petMedicationsRepository.deleteById(medicationId);
@@ -70,6 +69,6 @@ public class PetMedicationsService {
         else{
             throw new NoEntityFoundException("NO ENTITY FOUND");
         }
-        return oldMedication.get();
+        return oldMedication.get().getPet().getPetId();
     }
 }

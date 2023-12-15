@@ -63,7 +63,7 @@ public class PetVaccinationsService {
     }
 
     @Transactional
-    public PetVaccinations deleteVaccination(Integer vaccinationId){
+    public Integer deleteVaccination(Integer vaccinationId){
         Optional<PetVaccinations> oldVaccination = petVaccinationsRepository.findById(vaccinationId);
         if(oldVaccination.isPresent()){
             petVaccinationsRepository.deleteById(vaccinationId);
@@ -71,6 +71,6 @@ public class PetVaccinationsService {
         else{
             throw new NoEntityFoundException("NO ENTITY FOUND");
         }
-        return oldVaccination.get();
+        return oldVaccination.get().getPet().getPetId();
     }
 }
