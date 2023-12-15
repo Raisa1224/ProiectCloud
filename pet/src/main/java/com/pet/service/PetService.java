@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,6 +100,18 @@ public class PetService implements PetServiceImpl{
         newPet.setPetId(petOptional.get().getPetId());
         return petRepository.save(newPet);
     }
+    @Transactional
+    public Pet editPetFE(Integer petId, String petName, Integer yearOfBirth, String gender, String color, Double price, Boolean available){
+        Optional<Pet> petOld= petRepository.findById(petId);
+        if (petOld.isEmpty()) {
+            throw new PetNotFoundException(String.format("Not found pet with id %s", petId));
+        }
+        else{
+            petRepository.editPetFEPAg(petId, petName, yearOfBirth, gender, color, price, available);
+        }
+        return petOld.get();
+    }
+
 
     @Override
     public Page<Pet> findPaginated(Pageable pageable) {
