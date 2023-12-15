@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View pet veterinary visits</title>
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+
+</head>
+<body>
+
+<table class="table table-hover ">
+    <thead class="thead-inverse">
+    <tr>
+        <th>Clinic Name</th>
+        <th>Date</th>
+        <th>Cause</th>
+        <th>Result</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tr th:each="visit : ${visits}">
+        <td th:text="${visit.clinic}"> Clinic Name </td>
+        <td th:text="${visit.date}"> Date </td>
+        <td th:text="${visit.cause}"> Cause </td>
+        <td th:text="${visit.result}"> Result </td>
+
+        <td><a href="#" th:href="@{'/veterinaryvisits/edit/' + ${visit.visitId}}"><i class="fas fa-pen mx-1"></i></a></td>
+        <td><a href="#" th:href="@{'/veterinaryvisits/delete/'  + ${visit.visitId}}"><i class="fas fa-trash mx-1"></i></a></td>
+    </tr>
+</table>
+
+</body>
+</html>

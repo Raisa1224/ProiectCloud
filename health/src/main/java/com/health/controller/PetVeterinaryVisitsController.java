@@ -2,6 +2,7 @@ package com.health.controller;
 
 import com.health.constants.Constants;
 import com.health.entity.Pet;
+import com.health.entity.PetMedications;
 import com.health.entity.PetVaccinations;
 import com.health.entity.PetVeterinaryVisits;
 import com.health.service.PetMedicationsService;
@@ -23,7 +24,7 @@ public class PetVeterinaryVisitsController {
     @Autowired
     PetVeterinaryVisitsService petVeterinaryVisitsService;
 
-    @GetMapping("/{petId}")
+    @GetMapping("BE/{petId}")
     public ResponseEntity<List<PetVeterinaryVisits>> getAllVisitsForASpecificPet(@PathVariable Integer petId){
         List<PetVeterinaryVisits> petVeterinaryVisitsList = petVeterinaryVisitsService.getAllVisitsForPet(petId);
         return ResponseEntity.ok(petVeterinaryVisitsList);
@@ -39,6 +40,14 @@ public class PetVeterinaryVisitsController {
         return ResponseEntity.ok(petVeterinaryVisitsService.addVisit(petVeterinaryVisits));
     }
 
+    @GetMapping("/{petId}")
+    public String getVeterinaryVisitsForPet(Model model, @PathVariable Integer petId){
+        List<PetVeterinaryVisits> petVeterinaryVisits = petVeterinaryVisitsService.getAllVisitsForPet(petId);
+
+        model.addAttribute("visits", petVeterinaryVisits);
+
+        return "/getAllPetVeterinaryVisitsForPet";
+    }
     @RequestMapping("/add/{petId}")
     public String addVeterinaryVisit(Model model, @PathVariable Integer petId){
         Pet pet = new Pet(petId);

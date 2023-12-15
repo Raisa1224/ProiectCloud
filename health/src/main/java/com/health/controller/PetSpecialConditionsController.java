@@ -20,7 +20,7 @@ public class PetSpecialConditionsController {
     @Autowired
     PetSpecialConditionsService petSpecialConditionsService;
 
-    @GetMapping("/{petId}")
+    @GetMapping("BE/{petId}")
     public ResponseEntity<List<PetSpecialConditions>> getAllSpecialConditionsForPet(@PathVariable Integer petId){
         List<PetSpecialConditions> petSpecialConditions = petSpecialConditionsService.getAllSpecialConditionsForPet(petId);
         return ResponseEntity.ok(petSpecialConditions);
@@ -35,6 +35,16 @@ public class PetSpecialConditionsController {
     public ResponseEntity<PetSpecialConditions> addConditionBE(@RequestBody PetSpecialConditions petSpecialConditions){
         return ResponseEntity.ok(petSpecialConditionsService.addCondition(petSpecialConditions));
     }
+
+    @GetMapping("/{petId}")
+    public String getSpecialConditionsForPet(Model model, @PathVariable Integer petId){
+        List<PetSpecialConditions> petSpecialConditions = petSpecialConditionsService.getAllSpecialConditionsForPet(petId);
+
+        model.addAttribute("conditions", petSpecialConditions);
+
+        return "/getAllPetSpecialConditionsForPet";
+    }
+
     @RequestMapping("/add/{petId}")
     public String addCondition(Model model, @PathVariable Integer petId){
         Pet pet = new Pet(petId);

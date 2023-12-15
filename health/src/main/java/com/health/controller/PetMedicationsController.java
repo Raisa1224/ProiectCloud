@@ -25,6 +25,7 @@ public class PetMedicationsController {
     public ResponseEntity<List<PetMedications>> getAllMedications(){
         return ResponseEntity.ok(petMedicationsService.getAll());
     }
+    
     @GetMapping("/{petId}")
     public String getMedicationsForPet(Model model, @PathVariable Integer petId){
         List<PetMedications> petMedications = petMedicationsService.getAllMedicationsForPet(petId);
