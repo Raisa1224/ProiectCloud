@@ -5,6 +5,8 @@ import com.users.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,9 +34,32 @@ public class UsersController {
         return ResponseEntity.ok(user);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody User user){
+    @PostMapping("/addBE")
+    public ResponseEntity<User> addUserBE(@RequestBody User user){
         return ResponseEntity.ok(usersService.addUser(user));
+    }
+
+    @RequestMapping("/add")
+    public String addUser(Model model){
+        User user = new User();
+        model.addAttribute("user", user);
+
+        return "/register";
+    }
+
+    @PostMapping("")
+    public String register(@ModelAttribute("user") User user,
+                                   BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+            return "/register";
+        }
+        try{
+            usersService.addUser(user);
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/register";
+        }
+        return "redirect:/login" ; //metoda din controller nu din html
     }
 
     @PatchMapping("/edit/{userId}")
