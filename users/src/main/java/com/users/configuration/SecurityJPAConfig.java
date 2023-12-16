@@ -48,7 +48,7 @@ public class SecurityJPAConfig {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/users/getLoggedUserId")
+                                .defaultSuccessUrl("http://localhost:8081/pet/getAllPets")
                                 .permitAll()
                 ).logout(
                         logout -> logout

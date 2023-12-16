@@ -4,6 +4,7 @@ import com.pet.entity.Pet;
 import com.pet.entity.User;
 import com.pet.service.BreedService;
 import com.pet.service.PetService;
+import com.pet.service.RedisService;
 import com.pet.service.SpeciesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,9 @@ import java.util.Optional;
 public class PetController {
 
     @Autowired
+    private RedisService redisService;
+
+    @Autowired
     private PetService petService;
 
     @Autowired
@@ -44,6 +48,9 @@ public class PetController {
     public String getAllPets(Model model,
                                 @RequestParam("page") Optional<Integer> page,
                                 @RequestParam("size") Optional<Integer> size) {
+
+        String id = redisService.getData("userId");
+        System.out.println("DIN REDIS:"+id);
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(20);
 
