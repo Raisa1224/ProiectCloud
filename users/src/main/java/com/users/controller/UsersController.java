@@ -51,29 +51,6 @@ public class UsersController {
         return ResponseEntity.ok(usersService.addUser(user));
     }
 
-    @RequestMapping("/add")
-    public String addUser(Model model){
-        User user = new User();
-        model.addAttribute("user", user);
-
-        return "/register";
-    }
-
-    @PostMapping("")
-    public String register(@ModelAttribute("user") User user,
-                                   BindingResult bindingResult, Model model){
-        if (bindingResult.hasErrors()) {
-            return "/register";
-        }
-        try{
-            usersService.addUser(user);
-        }catch (Exception exception){
-            bindingResult.reject("globalError", exception.getMessage());
-            return "/register";
-        }
-        return "redirect:/login" ; //metoda din controller nu din html
-    }
-
     @PatchMapping("/edit/{userId}")
     public ResponseEntity<User> editUser(@PathVariable Integer userId, @RequestBody User user){
         return ResponseEntity.ok(usersService.editUser(userId, user));

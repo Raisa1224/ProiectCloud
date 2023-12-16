@@ -32,10 +32,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println(email);
         Optional<User> userOpt = userRepository.findByEmail(email);
-        System.out.println(userOpt);
-
         User user = userOpt.get();
         if (user != null) {
             redisService.saveData("userId", String.valueOf(user.getUserId()));

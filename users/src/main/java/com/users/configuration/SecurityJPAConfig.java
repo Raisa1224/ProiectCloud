@@ -35,13 +35,12 @@ public class SecurityJPAConfig {
         http.csrf().disable()
                 .anonymous().and()
                 .authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/users/add").permitAll()
+                        authorize.requestMatchers("/register").permitAll()
                                 .requestMatchers("/users").permitAll()
-                                .requestMatchers("/index").permitAll()
                                 .requestMatchers("http://localhost:8081/pet/getAllPets/").permitAll()
                                 .requestMatchers("/users/getLoggedUserId").permitAll()
                                 .requestMatchers("/users/{userId}").permitAll()
-                                .requestMatchers("/users/redirectAfterLogin").permitAll()
+                                .requestMatchers("/registerUser").permitAll()
                 )
                 .formLogin(
                         form -> form

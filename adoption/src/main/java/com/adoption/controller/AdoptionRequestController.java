@@ -6,6 +6,7 @@ import com.adoption.entity.Pet;
 import com.adoption.entity.User;
 import com.adoption.service.AdoptionFeedbackService;
 import com.adoption.service.AdoptionRequestService;
+import com.adoption.service.RedisService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -29,6 +30,9 @@ public class AdoptionRequestController {
 
     @Autowired
     private AdoptionFeedbackService adoptionFeedbackService;
+
+    @Autowired
+    private RedisService redisService;
 
     @GetMapping("/getAllAdoptions")
     public ResponseEntity<List<AdoptionRequest>> getAllAdoptionRequests(){
@@ -77,8 +81,8 @@ public class AdoptionRequestController {
                 });
         AdoptionRequest adoptionRequest = new AdoptionRequest();
         adoptionRequest.setPet(responsePet.getBody());
-        // TODO update for logged user
-        String loggedUserUrl = "http://localhost:8083/users/" + 1;
+        String id = redisService.getData("userId");
+        String loggedUserUrl = "http://localhost:8083/users/" + id;
         ResponseEntity<User> responseLoggedUser = restTemplate.exchange(
                 loggedUserUrl,
                 HttpMethod.GET,
@@ -108,8 +112,8 @@ public class AdoptionRequestController {
     @GetMapping("/adoptionListAsClient")
     public ModelAndView getAllAdoptionRequestByClient(){
         ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/getAllAdoptedPetsForClient");
-        // TODO update for logged user
-        List<AdoptionRequest> adoptionRequestList = adoptionRequestService.getAdoptionRequestByClient(1);
+        String id = redisService.getData("userId");
+        List<AdoptionRequest> adoptionRequestList = adoptionRequestService.getAdoptionRequestByClient(Integer.valueOf(id));
         modelAndView.addObject("adoptionRequests",adoptionRequestList);
         return modelAndView;
     }
@@ -128,8 +132,8 @@ public class AdoptionRequestController {
     @GetMapping("/adoptionListAsOwner")
     public ModelAndView getAllAdoptionRequestByOwner(){
         ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/getAllAdoptedPetsForOwner");
-        // TODO update for logged user
-        List<AdoptionRequest> adoptionRequestList = adoptionRequestService.getAdoptionRequestByOwner(1);
+        String id = redisService.getData("userId");
+        List<AdoptionRequest> adoptionRequestList = adoptionRequestService.getAdoptionRequestByOwner(Integer.valueOf(id));
         modelAndView.addObject("adoptionRequests",adoptionRequestList);
         return modelAndView;
     }
