@@ -43,7 +43,9 @@
                         <h6 class="panel-title" th:text="${'Breed: ' + getPet.breed.breedName}"></h6>
                         <h6 class="panel-title" th:text="${'Owner: ' + getPet.owner.firstname + ' ' + getPet.owner.lastname}"></h6>
                         <br>
+                        <a class="btn btn-primary" th:href="@{'http://localhost:8082/adoption/addAdoptionForm/' + ${getPet.petId}}">Adopt</a>
                     </div>
+                    <br>
                     <br><h4 th:text="${'Pet Health Overview'}"></h4>
                     <p>
                         <span th:text="${'Welcome to our Pet Details page, where we prioritize the well-being of your beloved companion. At '}"></span>
