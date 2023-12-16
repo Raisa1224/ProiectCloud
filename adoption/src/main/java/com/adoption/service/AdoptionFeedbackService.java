@@ -19,10 +19,10 @@ public class AdoptionFeedbackService {
         return adoptionFeedbackRepository.findAll();
     }
 
-    public AdoptionFeedback getAdoptionFeedbackById(Integer adoptionId){
-        Optional<AdoptionFeedback> adoptionFeedbackOptional= adoptionFeedbackRepository.findById(adoptionId);
+    public AdoptionFeedback getAdoptionFeedbackById(Integer feedbackId){
+        Optional<AdoptionFeedback> adoptionFeedbackOptional= adoptionFeedbackRepository.findById(feedbackId);
         if (adoptionFeedbackOptional.isEmpty()) {
-            throw new AdoptionFeedbackNotFoundException(String.format("Adoption feedback with id %s not found", adoptionId));
+            throw new AdoptionFeedbackNotFoundException(String.format("Adoption feedback with id %s not found", feedbackId));
         }
         return adoptionFeedbackOptional.get();
     }

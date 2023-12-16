@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -73,5 +74,28 @@ public class AdoptionFeedbackController {
     public String deleteFeedbackById(@PathVariable Integer adoptionId, @PathVariable Integer feedbackId){
         adoptionFeedbackService.deleteAdoptionFeedback(feedbackId);
         return "redirect:/adoption/" + adoptionId;
+    }
+
+    @RequestMapping("/editFeedbackFrom/{feedbackId}")
+    public String editFeedbackForm(@PathVariable Integer feedbackId, Model model) {
+        model.addAttribute("feedback", adoptionFeedbackService.getAdoptionFeedbackById(feedbackId));
+        return "/feedbackTemplates/editFeedback";
+    }
+
+    @PostMapping("/editFeedback/{feedbackId}")
+    public String editCage(@PathVariable Integer feedbackId,
+                           @ModelAttribute("feedback") @Valid AdoptionFeedback adoptionFeedback,
+                           BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()) {
+            return "/feedbackTemplates/editFeedback";
+        }
+        try{
+            adoptionFeedback.setFeedbackDate(new Date());
+            adoptionFeedbackService.editAdoptionFeedback(feedbackId, adoptionFeedback);
+        }catch (Exception exception){
+            bindingResult.reject("globalError", exception.getMessage());
+            return "/feedbackTemplates/editFeedback";
+        }
+        return "redirect:/adoption/" + adoptionFeedback.getAdoptionRequest().getAdoptionRequestId();
     }
 }

@@ -1,6 +1,7 @@
 package com.adoption.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.util.Date;
@@ -23,6 +24,7 @@ public class AdoptionFeedback {
     private Date feedbackDate;
 
     @Column(name = "content")
+    @NotEmpty(message = "Content is required")
     private String content;
 
     @Column(name = "rating")
