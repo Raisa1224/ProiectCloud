@@ -50,23 +50,43 @@
                         <b th:text="${getPet.petName}"></b>
                         <span th:text="${' personal health hub, we aim to provide you with a comprehensive insight into their medical journey.'}"></span>
                     </p>
-                    <p style="color: limegreen"> Here we will have the table</p>
+                    <br>
+                    <div>
+                        <p th:utext="${specialConditionsTable}"></p>
+                    </div>
                     <br>
                     <br><h4 th:text="${'Vaccination Chronicle'}"></h4>
                     <p>
                         <span th:text="${'Ensuring the optimal health of '}"></span>
                         <b th:text="${getPet.petName}"></b>
                         <span th:text="${', we have diligently maintained a record of vaccinations administered over time. From core vaccines safeguarding against common diseases to tailored preventive measures, each vaccine plays a crucial role in their ongoing health.'}"></span>
-                    </p></p>
-                    <p style="color: limegreen"> Here we will have the table</p>
+                    </p>
+                    <br>
+                    <div>
+                        <p th:utext="${vaccinationTable}"></p>
+                    </div>
                     <br>
                     <br><h4 th:text="${'Medication Records'}"></h4>
                     <p>
                         <span th:text="${'In '}"></span>
                         <b th:text="${getPet.petName}"></b>
                         <span th:text="${' journey towards a healthy and happy life, we have maintained meticulous records of any prescribed medications. Whether addressing minor ailments or managing chronic conditions, every dose has been carefully documented to keep you informed about your pet healthcare regimen.'}"></span>
-                    </p></p>
-                    <p style="color: limegreen"> Here we will have the table</p>
+                    </p>
+                    <br>
+                    <div>
+                        <p th:utext="${medicationTable}"></p>
+                    </div>
+                    <br>
+                    <br><h4 th:text="${'Veterinary Visits'}"></h4>
+                    <p>
+                        <span th:text="${'In '}"></span>
+                        <b th:text="${getPet.petName}"></b>
+                        <span th:text="${' journey towards a healthy and happy life, we have meticulously documented every veterinary visit. Whether it is a routine check-up or addressing specific health concerns, each visit plays a crucial role in maintaining your pet is well-being.'}"></span>
+                    </p>
+                    <br>
+                    <div>
+                        <p th:utext="${veterinaryVisitsTable}"></p>
+                    </div>
                     <br>
                 </div>
             </div>

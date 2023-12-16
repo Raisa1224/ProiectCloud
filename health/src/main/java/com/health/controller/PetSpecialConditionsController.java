@@ -41,6 +41,7 @@ public class PetSpecialConditionsController {
         List<PetSpecialConditions> petSpecialConditions = petSpecialConditionsService.getAllSpecialConditionsForPet(petId);
 
         model.addAttribute("conditions", petSpecialConditions);
+        model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
 
         return "/getAllPetSpecialConditionsForPet";
     }

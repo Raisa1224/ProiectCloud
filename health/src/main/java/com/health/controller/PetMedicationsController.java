@@ -31,6 +31,7 @@ public class PetMedicationsController {
         List<PetMedications> petMedications = petMedicationsService.getAllMedicationsForPet(petId);
 
         model.addAttribute("medications", petMedications);
+        model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
 
         return "/getAllPetMedicationsForPet";
     }

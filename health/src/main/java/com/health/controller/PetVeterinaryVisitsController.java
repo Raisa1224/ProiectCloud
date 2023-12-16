@@ -45,6 +45,7 @@ public class PetVeterinaryVisitsController {
         List<PetVeterinaryVisits> petVeterinaryVisits = petVeterinaryVisitsService.getAllVisitsForPet(petId);
 
         model.addAttribute("visits", petVeterinaryVisits);
+        model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
 
         return "/getAllPetVeterinaryVisitsForPet";
     }

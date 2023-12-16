@@ -45,6 +45,7 @@ public class PetVaccinationsController {
         List<PetVaccinations> petVaccinations = petVaccinationsService.getAllVaccinationsForPet(petId);
 
         model.addAttribute("vaccinations", petVaccinations);
+        model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
 
         return "/getAllPetVaccinationsForPet";
     }

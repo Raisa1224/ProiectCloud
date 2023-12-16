@@ -1,18 +1,3 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>View pet vaccinations</title>
-
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-          crossorigin="anonymous">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
-
-</head>
-<body>
-
 <table class="table table-hover ">
     <thead class="thead-inverse">
     <tr>
@@ -30,10 +15,7 @@
         <td th:text="${vaccination.dose}"> Dose </td>
         <td th:text="${vaccination.totalDoses}"> Total doses </td>
 
-        <td><a href="#" th:href="@{'/vaccinations/edit/' + ${vaccination.vaccinationId}}"><i class="fas fa-pen mx-1"></i></a></td>
+        <td><a href="#" th:href="@{${HEALTH} + '/vaccinations/edit/' + ${vaccination.vaccinationId}}"><i class="fas fa-pen mx-1"></i></a></td>
         <td><a href="#" th:href="@{'/vaccinations/delete/'  + ${vaccination.vaccinationId}}"><i class="fas fa-trash mx-1"></i></a></td>
     </tr>
 </table>
-
-</body>
-</html>

@@ -82,6 +82,46 @@ public class PetController {
 
     @GetMapping("/getPetById/{petId}")
     public String getPetById(@PathVariable Integer petId, Model model){
+        RestTemplate restTemplate = new RestTemplate();
+        String medicationUrl = "http://localhost:8080/medications/" + petId;
+        ResponseEntity<String> tableMedication = restTemplate.exchange(
+                medicationUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        model.addAttribute("medicationTable",tableMedication.getBody());
+
+        String specialConditionsUrl = "http://localhost:8080/conditions/" + petId;
+        ResponseEntity<String> tableSpecialConditions = restTemplate.exchange(
+                specialConditionsUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        model.addAttribute("specialConditionsTable",tableSpecialConditions.getBody());
+
+        String vaccinationUrl = "http://localhost:8080/vaccinations/" + petId;
+        ResponseEntity<String> tableVaccination = restTemplate.exchange(
+                vaccinationUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        model.addAttribute("vaccinationTable",tableVaccination.getBody());
+
+        String veterinaryVisitsUrl = "http://localhost:8080/veterinaryvisits/" + petId;
+        ResponseEntity<String> tableVeterinaryVisits = restTemplate.exchange(
+                veterinaryVisitsUrl,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        model.addAttribute("veterinaryVisitsTable",tableVeterinaryVisits.getBody());
 
         Pet idPet = petService.getPetById(petId);
         model.addAttribute("getPet",
