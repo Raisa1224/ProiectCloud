@@ -40,8 +40,7 @@ public class SecurityJPAConfig {
                                 .requestMatchers("/index").permitAll()
                                 .requestMatchers("http://localhost:8081/pet/getAllPets/").permitAll()
                                 .requestMatchers("/users/getLoggedUserId").permitAll()
-                                .requestMatchers("http://localhost:8082/adoption/addAdoptionForm/1").permitAll()
-                                .requestMatchers("/users/1").permitAll()
+                                .requestMatchers("/users/{userId}").permitAll()
                                 .requestMatchers("/users/redirectAfterLogin").permitAll()
                 )
                 .formLogin(

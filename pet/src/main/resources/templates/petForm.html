@@ -89,11 +89,9 @@
                         </div>
                         <br>
                         <div class="form-row">
-                            <label for="pet_available"><b>Available</b></label>
-                            <input class="form-control" id="pet_available" th:field="*{available}" type="text" placeholder="Ex: true"/>
+                            <input class="form-control" id="pet_available" th:field="*{available}" type="hidden" placeholder="Ex: true"/>
                             <p style="color: crimson" th:if="${#fields.hasErrors('available')}" th:errors="*{available}"></p>
                         </div>
-                        <br>
                         <div class="form-row">
                             <input class="form-control" id="pet_owner" th:field="*{owner.userId}" type="hidden"/>
                             <p style="color: crimson" th:if="${#fields.hasErrors('owner.userId')}" th:errors="*{owner.userId}"></p>

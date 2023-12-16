@@ -49,8 +49,7 @@ public class PetController {
                                 @RequestParam("page") Optional<Integer> page,
                                 @RequestParam("size") Optional<Integer> size) {
 
-        String id = redisService.getData("userId");
-        System.out.println("DIN REDIS:"+id);
+
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(20);
 
@@ -141,9 +140,9 @@ public class PetController {
         model.addAttribute("petAdd", new Pet());
         model.addAttribute("species", speciesService.getAllSpecies());
         model.addAttribute("breed", breedService.getAllBreeds());
-        //user for add
+        String id = redisService.getData("userId");
         RestTemplate restTemplate = new RestTemplate();
-        String userUrlLogged = "http://localhost:8083/users/" + 2;
+        String userUrlLogged = "http://localhost:8083/users/" + id;
         ResponseEntity<User> loggedUser = restTemplate.exchange(
                 userUrlLogged,
                 HttpMethod.GET,
@@ -176,6 +175,7 @@ public class PetController {
                 }
         );
         pet.setOwner(loggedUser.getBody());
+        pet.setAvailable(true);
         model.addAttribute("pet",pet);
 
         if (result.hasErrors()) {
