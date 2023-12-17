@@ -67,7 +67,7 @@ public class PetVeterinaryVisitsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetVeterinaryVisit";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVeterinaryVisits.getPet().getPetId() ;
     }
 
     @PatchMapping("/editBE/{visitId}")
@@ -104,13 +104,13 @@ public class PetVeterinaryVisitsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetVeterinaryVisit";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVeterinaryVisits.getPet().getPetId() ;
 
     }
 
     @RequestMapping("/delete/{visitId}")
     public String deleteVeterinaryVisit(@PathVariable Integer visitId){
-        petVeterinaryVisitsService.deleteVisit(visitId);
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
+        Integer petId = petVeterinaryVisitsService.deleteVisit(visitId);
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petId ;
     }
 }

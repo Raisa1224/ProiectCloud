@@ -69,7 +69,7 @@ public class PetSpecialConditionsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetSpecialCondition";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petSpecialConditions.getPet().getPetId() ;
     }
 
     @PatchMapping("/editBE/{conditionId}")
@@ -106,13 +106,13 @@ public class PetSpecialConditionsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetSpecialCondition";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL ;
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petSpecialConditions.getPet().getPetId() ;
 
     }
 
     @RequestMapping("/delete/{conditionId}")
     public String deleteCondition(@PathVariable Integer conditionId){
-        petSpecialConditionsService.deleteCondition(conditionId);
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL ;
+        Integer petId = petSpecialConditionsService.deleteCondition(conditionId);
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petId ;
     }
 }

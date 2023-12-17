@@ -2,6 +2,7 @@ package com.health.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -21,6 +22,7 @@ public class PetVaccinations {
     private String name;
 
     @Column(name = "vaccination_date")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date date;
 
     @Column(name = "dose")

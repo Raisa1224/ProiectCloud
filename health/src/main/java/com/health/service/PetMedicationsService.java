@@ -1,11 +1,17 @@
 package com.health.service;
 
+import com.health.constants.Constants;
+import com.health.entity.Pet;
 import com.health.entity.PetMedications;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetMedicationsRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +21,7 @@ import java.util.Optional;
 public class PetMedicationsService {
     @Autowired
     PetMedicationsRepository petMedicationsRepository;
+
 
     public List<PetMedications> getAll(){
         List<PetMedications> medications = petMedicationsRepository.findAll();
@@ -43,8 +50,6 @@ public class PetMedicationsService {
 
     @Transactional
     public PetMedications addMedication(PetMedications petMedications){
-        System.out.println(petMedications.getPet());
-        //search the pet in the db and return error if it doesn't exist
         return petMedicationsRepository.save(petMedications);
     }
 

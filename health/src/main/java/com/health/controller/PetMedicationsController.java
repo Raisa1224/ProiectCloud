@@ -63,7 +63,7 @@ public class PetMedicationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetMedication";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL ;
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petMedication.getPet().getPetId() ;
     }
 
     @PatchMapping("/editMedicationBE/{medicationId}")
@@ -100,14 +100,14 @@ public class PetMedicationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetMedication";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petMedication.getPet().getPetId() ;
 
     }
 
 
     @RequestMapping("/delete/{medicationId}")
     public String deleteMedication(@PathVariable Integer medicationId){
-        petMedicationsService.deleteMedication(medicationId);
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
+        Integer petId = petMedicationsService.deleteMedication(medicationId);
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petId ;
     }
 }
