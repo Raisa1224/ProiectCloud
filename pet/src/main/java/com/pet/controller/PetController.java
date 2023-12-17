@@ -49,7 +49,17 @@ public class PetController {
         int pageSize = size.orElse(20);
 
         Page<Pet> petPage = petService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
-
+        String id = redisService.getData("userId");
+        RestTemplate restTemplate = new RestTemplate();
+        String userUrlLogged = "http://localhost:8083/users/" + id;
+        ResponseEntity<User> loggedUser = restTemplate.exchange(
+                userUrlLogged,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<>() {
+                }
+        );
+        model.addAttribute("loggedUser", loggedUser.getBody());
         model.addAttribute("petPage", petPage);
 
         return "petList";
@@ -140,7 +150,8 @@ public class PetController {
 
         //user for add
         RestTemplate restTemplate = new RestTemplate();
-        String userUrlLogged = "http://localhost:8083/users/" + 1;
+        String id = redisService.getData("userId");
+        String userUrlLogged = "http://localhost:8083/users/" + id;
         ResponseEntity<User> loggedUser = restTemplate.exchange(
                 userUrlLogged,
                 HttpMethod.GET,
