@@ -2,8 +2,6 @@ package com.health.controller;
 
 import com.health.constants.Constants;
 import com.health.entity.Pet;
-import com.health.entity.PetMedications;
-import com.health.entity.PetSpecialConditions;
 import com.health.entity.PetVaccinations;
 import com.health.service.PetVaccinationsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +53,6 @@ public class PetVaccinationsController {
         PetVaccinations petVaccinations = new PetVaccinations();
 
         petVaccinations.setPet(pet);
-        System.out.println(petVaccinations);
         model.addAttribute("vaccination", petVaccinations);
 
         return "/addPetVaccination";
@@ -74,7 +71,7 @@ public class PetVaccinationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetVaccination";
         }
-        return "redirect:" + Constants.GET_ALL_PETS_URL; //metoda din controller nu din html
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
     }
 
     @PatchMapping("/editBE/{vaccinationId}")
@@ -86,8 +83,6 @@ public class PetVaccinationsController {
     public String vaccinationEditForm(Model model, @PathVariable Integer vaccinationId) {
 
         PetVaccinations petVaccinations = petVaccinationsService.getById(vaccinationId);
-
-        System.out.println("IN FIRST EDIT METHOD:"+ petVaccinations);
 
         model.addAttribute("vaccination", petVaccinations);
 
@@ -104,7 +99,6 @@ public class PetVaccinationsController {
         petVaccinations.setVaccinationId(old.getVaccinationId());
         petVaccinations.setPet(old.getPet());
 
-        System.out.println("IN FIRST EDIT METHOD:"+ petVaccinations);
         if (bindingResult.hasErrors()) {
             return "/editPetVaccination";
         }
@@ -114,15 +108,13 @@ public class PetVaccinationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetVaccination";
         }
-        return "redirect:" + Constants.GET_ALL_PETS_URL ; //metoda din controller nu din html
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL ;
 
     }
 
     @RequestMapping("/delete/{vaccinationId}")
     public String deleteVaccination(@PathVariable Integer vaccinationId){
-        Integer petId = petVaccinationsService.deleteVaccination(vaccinationId);
-        System.out.println(petId);
-        //get pet by id
-        return "redirect:" + Constants.GET_PET_BY_ID_URL + petId;
+        petVaccinationsService.deleteVaccination(vaccinationId);
+        return "redirect:"+ Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL ;
     }
 }

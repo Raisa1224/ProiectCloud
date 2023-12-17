@@ -15,7 +15,7 @@
         <td th:text="${visit.cause}"> Cause </td>
         <td th:text="${visit.result}"> Result </td>
 
-        <td><a href="#" th:href="@{'/veterinaryvisits/edit/' + ${visit.visitId}}"><i class="fas fa-pen mx-1"></i></a></td>
-        <td><a href="#" th:href="@{'/veterinaryvisits/delete/'  + ${visit.visitId}}"><i class="fas fa-trash mx-1"></i></a></td>
+        <td><a href="#" th:href="@{${HEALTH} + '/veterinaryvisits/edit/' + ${visit.visitId}}"><i class="fas fa-pen mx-1"></i></a></td>
+        <td><a href="#" th:href="@{${HEALTH} + '/veterinaryvisits/delete/'  + ${visit.visitId}}"><i class="fas fa-trash mx-1"></i></a></td>
     </tr>
 </table>

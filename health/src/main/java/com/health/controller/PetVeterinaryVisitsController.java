@@ -2,16 +2,11 @@ package com.health.controller;
 
 import com.health.constants.Constants;
 import com.health.entity.Pet;
-import com.health.entity.PetMedications;
-import com.health.entity.PetVaccinations;
 import com.health.entity.PetVeterinaryVisits;
-import com.health.service.PetMedicationsService;
 import com.health.service.PetVeterinaryVisitsService;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +50,6 @@ public class PetVeterinaryVisitsController {
         PetVeterinaryVisits petVeterinaryVisits = new PetVeterinaryVisits();
 
         petVeterinaryVisits.setPet(pet);
-        System.out.println(petVeterinaryVisits);
         model.addAttribute("veterinaryvisit", petVeterinaryVisits);
 
         return "/addPetVeterinaryVisit";
@@ -64,7 +58,6 @@ public class PetVeterinaryVisitsController {
     @PostMapping("")
     public String addPetVeterinaryVisit(@ModelAttribute("veterinaryvisit") PetVeterinaryVisits petVeterinaryVisits,
                                     BindingResult bindingResult, Model model){
-        System.out.println(petVeterinaryVisits);
         if (bindingResult.hasErrors()) {
             return "/addPetVeterinaryVisit";
         }
@@ -74,7 +67,7 @@ public class PetVeterinaryVisitsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetVeterinaryVisit";
         }
-        return "redirect:" + Constants.GET_ALL_PETS_URL; //metoda din controller nu din html
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
     }
 
     @PatchMapping("/editBE/{visitId}")
@@ -86,8 +79,6 @@ public class PetVeterinaryVisitsController {
     public String veterinaryVisitEditForm(Model model, @PathVariable Integer visitId) {
 
         PetVeterinaryVisits petVeterinaryVisits = petVeterinaryVisitsService.getById(visitId);
-
-        System.out.println("IN FIRST EDIT METHOD:"+ petVeterinaryVisits);
 
         model.addAttribute("veterinaryvisit", petVeterinaryVisits);
 
@@ -104,7 +95,6 @@ public class PetVeterinaryVisitsController {
         petVeterinaryVisits.setVisitId(old.getVisitId());
         petVeterinaryVisits.setPet(old.getPet());
 
-        System.out.println("IN FIRST EDIT METHOD:"+ petVeterinaryVisits);
         if (bindingResult.hasErrors()) {
             return "/editPetVeterinaryVisit";
         }
@@ -114,15 +104,13 @@ public class PetVeterinaryVisitsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetVeterinaryVisit";
         }
-        return "redirect:" + Constants.GET_ALL_PETS_URL ; //metoda din controller nu din html
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
 
     }
 
     @RequestMapping("/delete/{visitId}")
     public String deleteVeterinaryVisit(@PathVariable Integer visitId){
-        Integer petId = petVeterinaryVisitsService.deleteVisit(visitId);
-        System.out.println(petId);
-        //get pet by id
-        return "redirect:" + Constants.GET_PET_BY_ID_URL + petId;
+        petVeterinaryVisitsService.deleteVisit(visitId);
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
     }
 }

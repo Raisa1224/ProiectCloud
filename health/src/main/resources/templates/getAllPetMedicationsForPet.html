@@ -18,6 +18,6 @@
         <td th:text="${medication.observations}"> Observations </td>
 
         <td><a href="#" th:href="@{${HEALTH} + '/medications/edit/' + ${medication.medicationId}}"><i class="fas fa-pen mx-1"></i></a></td>
-        <td><a href="#" th:href="@{'/medications/delete/'  + ${medication.medicationId}}"><i class="fas fa-trash mx-1"></i></a></td>
+        <td><a href="#" th:href="@{${HEALTH} + '/medications/delete/'  + ${medication.medicationId}}"><i class="fas fa-trash mx-1"></i></a></td>
     </tr>
 </table>

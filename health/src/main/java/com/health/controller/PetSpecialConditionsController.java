@@ -2,7 +2,6 @@ package com.health.controller;
 
 import com.health.constants.Constants;
 import com.health.entity.Pet;
-import com.health.entity.PetMedications;
 import com.health.entity.PetSpecialConditions;
 import com.health.service.PetSpecialConditionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,6 @@ public class PetSpecialConditionsController {
         PetSpecialConditions petSpecialConditions = new PetSpecialConditions();
 
         petSpecialConditions.setPet(pet);
-        System.out.println(petSpecialConditions);
         model.addAttribute("condition", petSpecialConditions);
 
         return "/addPetSpecialCondition";
@@ -71,7 +69,7 @@ public class PetSpecialConditionsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetSpecialCondition";
         }
-        return "redirect:" + Constants.GET_ALL_PETS_URL; //metoda din controller nu din html
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
     }
 
     @PatchMapping("/editBE/{conditionId}")
@@ -99,7 +97,6 @@ public class PetSpecialConditionsController {
         petSpecialConditions.setConditionId(old.getConditionId());
         petSpecialConditions.setPet(old.getPet());
 
-        System.out.println("IN FIRST EDIT METHOD:"+ petSpecialConditions);
         if (bindingResult.hasErrors()) {
             return "/editPetSpecialCondition";
         }
@@ -109,15 +106,13 @@ public class PetSpecialConditionsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetSpecialCondition";
         }
-        return "redirect:" + Constants.GET_ALL_PETS_URL ; //metoda din controller nu din html
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL ;
 
     }
 
     @RequestMapping("/delete/{conditionId}")
     public String deleteCondition(@PathVariable Integer conditionId){
-        Integer petId = petSpecialConditionsService.deleteCondition(conditionId);
-        System.out.println(petId);
-        //get pet by id
-        return "redirect:" + Constants.GET_PET_BY_ID_URL + petId;
+        petSpecialConditionsService.deleteCondition(conditionId);
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL ;
     }
 }

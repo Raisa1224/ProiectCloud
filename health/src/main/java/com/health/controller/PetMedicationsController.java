@@ -4,7 +4,6 @@ import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetMedications;
 import com.health.service.PetMedicationsService;
-import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -64,7 +63,7 @@ public class PetMedicationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/addPetMedication";
         }
-        return "redirect:" + Constants.GET_ALL_PETS_URL ; //metoda din controller nu din html
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL ;
     }
 
     @PatchMapping("/editMedicationBE/{medicationId}")
@@ -76,8 +75,6 @@ public class PetMedicationsController {
     public String medicationEditForm(Model model, @PathVariable Integer medicationId) {
 
         PetMedications petMedications = petMedicationsService.getById(medicationId);
-
-        System.out.println("IN FIRST EDIT METHOD:"+ petMedications);
 
         model.addAttribute("medication", petMedications);
 
@@ -94,7 +91,6 @@ public class PetMedicationsController {
         petMedication.setMedicationId(old.getMedicationId());
         petMedication.setPet(old.getPet());
 
-        System.out.println("IN FIRST EDIT METHOD:"+ petMedication);
         if (bindingResult.hasErrors()) {
             return "/editPetMedication";
         }
@@ -104,16 +100,14 @@ public class PetMedicationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "/editPetMedication";
         }
-        return "redirect:" + Constants.GET_ALL_PETS_URL; //metoda din controller nu din html
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
 
     }
 
 
     @RequestMapping("/delete/{medicationId}")
     public String deleteMedication(@PathVariable Integer medicationId){
-        Integer petId = petMedicationsService.deleteMedication(medicationId);
-        System.out.println(petId);
-        //get pet by id
-        return "redirect:" + Constants.GET_PET_BY_ID_URL + petId;
+        petMedicationsService.deleteMedication(medicationId);
+        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_ALL_PETS_URL;
     }
 }
