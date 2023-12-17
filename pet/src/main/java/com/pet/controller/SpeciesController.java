@@ -36,11 +36,6 @@ public class SpeciesController {
         return "speciesList";
     }
 
-//    @GetMapping("/getSpeciesById/{speciesId}")
-//    public ResponseEntity<Species> getSpeciesById(@PathVariable Integer speciesId){
-//        return ResponseEntity.ok(speciesService.getSpeciesById(speciesId));
-//    }
-
     @RequestMapping("/add")
     public String addSpeciesForm(Model model) {
         model.addAttribute("speciesAdd", new Species());

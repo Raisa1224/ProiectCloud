@@ -20,8 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -41,9 +39,6 @@ public class PetController {
     @Autowired
     private SpeciesService speciesService;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
     @RequestMapping("/getAllPets")
     public String getAllPets(Model model,
                                 @RequestParam("page") Optional<Integer> page,
@@ -59,27 +54,6 @@ public class PetController {
 
         return "petList";
     }
-
-//    @GetMapping("/getPetsByName/{petName}")
-//    public ResponseEntity<List<Pet>> getPetsById(@PathVariable String petName){
-//        return ResponseEntity.ok(petService.getPetsByName(petName));
-//    }
-//
-//    @GetMapping("/getPetsByOwner/{ownerId}")
-//    public ResponseEntity<List<Pet>> getPetsByOwner(@PathVariable Integer ownerId){
-//        return ResponseEntity.ok(petService.getPetsByOwner(ownerId));
-//    }
-//
-//    @GetMapping("/getPetsBySpecies/{speciesId}")
-//    public ResponseEntity<List<Pet>> getPetsBySpecies(@PathVariable Integer speciesId){
-//        return ResponseEntity.ok(petService.getPetsBySpecies(speciesId));
-//    }
-//
-//    @GetMapping("/getPetsByBreed/{breedId}")
-//    public ResponseEntity<List<Pet>> getPetsByBreed(@PathVariable Integer breedId){
-//        return ResponseEntity.ok(petService.getPetsByBreed(breedId));
-//    }
-
 
     @GetMapping("/getByIdPet/{petId}")
     public ResponseEntity<Pet> getByIdPet(@PathVariable Integer petId){

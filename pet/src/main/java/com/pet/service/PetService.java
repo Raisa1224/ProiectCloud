@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,46 +19,6 @@ public class PetService implements PetServiceImpl{
 
     @Autowired
     private PetRepository petRepository;
-
-    public List<Pet> getAllPets(){
-        List<Pet> pets = petRepository.findAll();
-        if(pets == null){
-            pets = new ArrayList<>();
-        }
-        return pets;
-    }
-
-    public List<Pet> getPetsByName(String petName){
-        List<Pet> pets = petRepository.findByPetName(petName);
-        if(pets == null){
-            pets = new ArrayList<>();
-        }
-        return pets;
-    }
-
-    public List<Pet> getPetsByOwner(Integer ownerId){
-        List<Pet> pets = petRepository.findByOwnerId(ownerId);
-        if(pets == null){
-            pets = new ArrayList<>();
-        }
-        return pets;
-    }
-
-    public List<Pet> getPetsBySpecies(Integer speciesId){
-        List<Pet> pets = petRepository.findBySpeciesId(speciesId);
-        if(pets == null){
-            pets = new ArrayList<>();
-        }
-        return pets;
-    }
-
-    public List<Pet> getPetsByBreed(Integer breedId){
-        List<Pet> pets = petRepository.findByBreedId(breedId);
-        if(pets == null){
-            pets = new ArrayList<>();
-        }
-        return pets;
-    }
 
     public Pet getPetById(Integer petId){
         Optional<Pet> petOptional= petRepository.findById(petId);

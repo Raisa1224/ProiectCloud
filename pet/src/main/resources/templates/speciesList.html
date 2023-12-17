@@ -1,36 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Species</title>
-
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
-
-
-    <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto topnav">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{'/pet/getAllPets'}">Pets</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{'/species/getAllSpecies'}">Species</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{'/breed/getAllBreeds'}">Breeds</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
 </head>
+
 <body>
+<div th:replace="~{/header :: header}"></div>
 <div class="container" style="margin-top: 50px"><br>
     <div class="col-md-2 ml-md-auto">
         <a class="nav-link btn btn-primary text-white" type="button" th:href="@{'/species/add'}" >Add species</a>
@@ -55,10 +37,8 @@
             <td><a href="#" th:href="@{'/species/deleteSpecies/' + ${species.species_id}}"> <i class="fas fa-trash mx-1"></i> </a></td>
         </tr>
     </table>
-
     <nav th:if="${speciesPage.totalPages > 0}" aria-label="Page navigation example">
         <ul  class="pagination">
-
             <li class="page-item">
                 <a th:if="${speciesPage.number > 0}"
                    th:href="@{/species/getAllSpecies(size=${speciesPage.size}, page=${speciesPage.number})}"
@@ -74,7 +54,6 @@
                 </a></li>
             <li th:class="${speciesPage.number>6} ? 'page-item active':  'page-item'"
                 th:if="${speciesPage.totalPages > 6}"><a class="page-link" href="#">...</a></li>
-
             <li th:if="${speciesPage.number < speciesPage.totalPages}" class="page-item">
                 <a th:if="${speciesPage.number < speciesPage.totalPages -1}"
                    th:href="@{/species/getAllSpecies(size=${speciesPage.size}, page=${speciesPage.number+2})}"

@@ -36,11 +36,6 @@ public class BreedController {
         return "breedList";
     }
 
-//    @GetMapping("/getBreedById/{breedId}")
-//    public ResponseEntity<Breed> getBreedById(@PathVariable Integer breedId){
-//        return ResponseEntity.ok(breedService.getBreedById(breedId));
-//    }
-
     @RequestMapping("/add")
     public String addBreedForm(Model model) {
         model.addAttribute("breedAdd", new Breed());

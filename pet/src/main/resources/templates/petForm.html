@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Add pet</title>
@@ -10,35 +11,16 @@
           crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
 
-
-    <div class="container">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav ml-auto topnav">
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{'/pet/getAllPets'}">Pets</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{'/species/getAllSpecies'}">Species</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{'/breed/getAllBreeds'}">Breeds</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
 </head>
-<body>
 
+<body>
+<div th:replace="~{/header :: header}"></div>
 <form enctype="multipart/form-data" method="post" th:action="@{/pet/addPet}" th:object="${petAdd}">
     <div class="container" style="margin-top: 50px">
         <div class="panel panel-default">
             <div  class="panel-heading">
                 <h3> Add new breed </h3><br>
             </div>
-
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-md-10 ">
