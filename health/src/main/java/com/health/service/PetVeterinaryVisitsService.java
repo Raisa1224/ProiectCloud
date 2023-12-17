@@ -2,6 +2,7 @@ package com.health.service;
 
 import com.health.entity.PetSpecialConditions;
 import com.health.entity.PetVeterinaryVisits;
+import com.health.exceptions.EntityAlreadyExistsException;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetVeterinaryVisitsRepository;
 import jakarta.transaction.Transactional;
@@ -38,6 +39,10 @@ public class PetVeterinaryVisitsService {
 
     @Transactional
     public PetVeterinaryVisits addVisit(PetVeterinaryVisits petVeterinaryVisits){
+        Optional<PetVeterinaryVisits> existing = petVeterinaryVisitsRepository.findByClinicAndCauseAndResultAndDate(petVeterinaryVisits.getClinic(), petVeterinaryVisits.getCause(), petVeterinaryVisits.getResult(), petVeterinaryVisits.getDate());
+        if(existing.isPresent()){
+            throw new EntityAlreadyExistsException("Visit was already added");
+        }
         return petVeterinaryVisitsRepository.save(petVeterinaryVisits);
     }
 
@@ -45,6 +50,10 @@ public class PetVeterinaryVisitsService {
     public PetVeterinaryVisits editVisit(Integer visitId, String clinic, Date date, String cause, String result){
         Optional<PetVeterinaryVisits> old = petVeterinaryVisitsRepository.findById(visitId);
         if(old.isPresent()){
+            Optional<PetVeterinaryVisits> existing = petVeterinaryVisitsRepository.findByClinicAndCauseAndResultAndDate(clinic,cause, result, date);
+            if(existing.isPresent()){
+                throw new EntityAlreadyExistsException("Visit was already added");
+            }
             petVeterinaryVisitsRepository.editVeterinaryVisit(visitId, clinic, date, cause, result);
         }
         else{

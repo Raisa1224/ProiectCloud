@@ -4,6 +4,7 @@ import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetVaccinations;
 import com.health.service.PetVaccinationsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -59,7 +60,7 @@ public class PetVaccinationsController {
     }
 
     @PostMapping("")
-    public String addPetVaccination(@ModelAttribute("vaccination") PetVaccinations petVaccinations,
+    public String addPetVaccination(@ModelAttribute("vaccination") @Valid PetVaccinations petVaccinations,
                                       BindingResult bindingResult, Model model){
         System.out.println(petVaccinations);
         if (bindingResult.hasErrors()) {
@@ -92,7 +93,7 @@ public class PetVaccinationsController {
 
     @PostMapping("/editVaccination/{vaccinationId}")
     public String editVaccination(@PathVariable Integer vaccinationId ,
-                                @ModelAttribute("vaccination") PetVaccinations petVaccinations,
+                                @ModelAttribute("vaccination") @Valid PetVaccinations petVaccinations,
                                 BindingResult bindingResult){
 
         PetVaccinations old = petVaccinationsService.getById(vaccinationId);

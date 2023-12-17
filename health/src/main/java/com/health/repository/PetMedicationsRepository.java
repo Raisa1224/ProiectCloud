@@ -14,6 +14,7 @@ public interface PetMedicationsRepository extends JpaRepository<PetMedications, 
 
     Optional<PetMedications> findById(Integer id);
 
+    Optional<PetMedications> findByNameAndReasonAndDosageAndFrequencyDays(String name, String reason, Integer dosage, Integer frequencyDays);
 
     @Query("SELECT p FROM PetMedications p WHERE p.pet.petId = :petId")
     List<PetMedications> findByPetId(Integer petId);

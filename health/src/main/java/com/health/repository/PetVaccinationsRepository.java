@@ -14,6 +14,8 @@ import java.util.Optional;
 public interface PetVaccinationsRepository extends JpaRepository<PetVaccinations, Integer> {
 
     Optional<PetVaccinations> findById(Integer id);
+
+    Optional<PetVaccinations> findByNameAndDateAndDoseAndTotalDoses(String name, Date date, Integer dose, Integer totalDoses);
     @Query("SELECT p FROM PetVaccinations p WHERE p.pet.petId = :petId")
     List<PetVaccinations> findByPetId(Integer petId);
 

@@ -23,6 +23,10 @@
             <div class="panel-body">
                 <div class="form-group row">
                     <div class="col-md-10 ">
+                        <div th:if="${#fields.hasErrors('global')}" class="text-center">
+                            <h4>There was an error processing the condition:</h4>
+                            <p th:each="exception : ${#fields.errors('global')}" th:text="${exception}" class="text-danger"></p>
+                        </div>
                         <div class="form-row">
                             <label for="name"><b>Condition name</b></label>
                             <input class="form-control" id="name" th:field="*{name}" type="text" placeholder="Ex: Polen Allergy"/>

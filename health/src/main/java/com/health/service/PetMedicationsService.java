@@ -3,6 +3,7 @@ package com.health.service;
 import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetMedications;
+import com.health.exceptions.EntityAlreadyExistsException;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetMedicationsRepository;
 import jakarta.transaction.Transactional;
@@ -45,11 +46,15 @@ public class PetMedicationsService {
         if(petMedications.isPresent()){
             return  petMedications.get();
         }
-        else throw new NoEntityFoundException("NO ENTITY FOUND");
+        else throw new NoEntityFoundException("Medication was not found");
     }
 
     @Transactional
     public PetMedications addMedication(PetMedications petMedications){
+        Optional<PetMedications> existing = petMedicationsRepository.findByNameAndReasonAndDosageAndFrequencyDays(petMedications.getName(), petMedications.getReason(), petMedications.getDosage(), petMedications.getFrequencyDays());
+        if(existing.isPresent()){
+            throw new EntityAlreadyExistsException("Medication was already added");
+        }
         return petMedicationsRepository.save(petMedications);
     }
 
@@ -57,10 +62,14 @@ public class PetMedicationsService {
     public PetMedications editMedication(Integer medication, Integer dosage, Integer frequencyDays, String name, String reason, String observations){
         Optional<PetMedications> oldMedication = petMedicationsRepository.findById(medication);
         if(oldMedication.isPresent()){
+            Optional<PetMedications> existing = petMedicationsRepository.findByNameAndReasonAndDosageAndFrequencyDays(name, reason, dosage, frequencyDays);
+            if(existing.isPresent()){
+                throw new EntityAlreadyExistsException("Medication was already added");
+            }
             petMedicationsRepository.editMedication(medication, dosage, frequencyDays, name, reason, observations);
         }
         else{
-            throw new NoEntityFoundException("NO ENTITY FOUND");
+            throw new NoEntityFoundException("Medication was not found");
         }
         return oldMedication.get();
     }

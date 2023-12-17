@@ -4,6 +4,7 @@ import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetSpecialConditions;
 import com.health.service.PetSpecialConditionsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -57,7 +58,7 @@ public class PetSpecialConditionsController {
     }
 
     @PostMapping("")
-    public String addSpecialCondition(@ModelAttribute("condition") PetSpecialConditions petSpecialConditions,
+    public String addSpecialCondition(@ModelAttribute("condition") @Valid PetSpecialConditions petSpecialConditions,
                                    BindingResult bindingResult, Model model){
         System.out.println(petSpecialConditions);
         if (bindingResult.hasErrors()) {
@@ -90,7 +91,7 @@ public class PetSpecialConditionsController {
 
     @PostMapping("/editCondition/{conditionId}")
     public String editCondition(@PathVariable Integer conditionId ,
-                                 @ModelAttribute("condition") PetSpecialConditions petSpecialConditions,
+                                 @ModelAttribute("condition") @Valid PetSpecialConditions petSpecialConditions,
                                  BindingResult bindingResult){
 
         PetSpecialConditions old = petSpecialConditionsService.getById(conditionId);

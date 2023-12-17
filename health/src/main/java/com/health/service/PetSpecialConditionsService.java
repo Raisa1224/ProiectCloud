@@ -2,6 +2,7 @@ package com.health.service;
 
 import com.health.entity.PetMedications;
 import com.health.entity.PetSpecialConditions;
+import com.health.exceptions.EntityAlreadyExistsException;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetSpecialConditionsRepository;
 import jakarta.transaction.Transactional;
@@ -37,6 +38,10 @@ public class PetSpecialConditionsService {
 
     @Transactional
     public PetSpecialConditions addCondition(PetSpecialConditions petSpecialConditions){
+        Optional<PetSpecialConditions> existing = petSpecialConditionsRepository.findByName(petSpecialConditions.getName());
+        if(existing.isPresent()){
+            throw new EntityAlreadyExistsException("Condition was already added");
+        }
         return petSpecialConditionsRepository.save(petSpecialConditions);
     }
 
@@ -44,6 +49,10 @@ public class PetSpecialConditionsService {
     public PetSpecialConditions editCondition(Integer conditionId, String name, String description, String observations){
         Optional<PetSpecialConditions> old = petSpecialConditionsRepository.findById(conditionId);
         if(old.isPresent()){
+            Optional<PetSpecialConditions> existing = petSpecialConditionsRepository.findByName(name);
+            if(existing.isPresent()){
+                throw new EntityAlreadyExistsException("Condition was already added");
+            }
             petSpecialConditionsRepository.editSpecialCondition(conditionId, name, description, observations);
         }
         else{

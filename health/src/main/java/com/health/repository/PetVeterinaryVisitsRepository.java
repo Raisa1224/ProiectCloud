@@ -15,6 +15,8 @@ public interface PetVeterinaryVisitsRepository extends JpaRepository<PetVeterina
 
     Optional<PetVeterinaryVisits> findById(Integer id);
 
+    Optional<PetVeterinaryVisits> findByClinicAndCauseAndResultAndDate(String clinic, String cause, String result, Date date);
+
     @Query("SELECT p FROM PetVeterinaryVisits p WHERE p.pet.petId = :petId")
     List<PetVeterinaryVisits> findByPetId(Integer petId);
 

@@ -4,6 +4,7 @@ import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetVeterinaryVisits;
 import com.health.service.PetVeterinaryVisitsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -56,7 +57,7 @@ public class PetVeterinaryVisitsController {
     }
 
     @PostMapping("")
-    public String addPetVeterinaryVisit(@ModelAttribute("veterinaryvisit") PetVeterinaryVisits petVeterinaryVisits,
+    public String addPetVeterinaryVisit(@ModelAttribute("veterinaryvisit") @Valid PetVeterinaryVisits petVeterinaryVisits,
                                     BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
             return "/addPetVeterinaryVisit";
@@ -88,7 +89,7 @@ public class PetVeterinaryVisitsController {
 
     @PostMapping("/editVeterinaryVisit/{visitId}")
     public String editVeterinaryVisit(@PathVariable Integer visitId ,
-                                  @ModelAttribute("veterinaryvisit") PetVeterinaryVisits petVeterinaryVisits,
+                                  @ModelAttribute("veterinaryvisit") @Valid PetVeterinaryVisits petVeterinaryVisits,
                                   BindingResult bindingResult){
 
         PetVeterinaryVisits old = petVeterinaryVisitsService.getById(visitId);

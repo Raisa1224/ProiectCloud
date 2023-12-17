@@ -1,6 +1,7 @@
 package com.health.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Entity
@@ -16,9 +17,11 @@ public class PetMedications {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer medicationId;
     @Column(name = "medication_name")
+    @NotEmpty(message = "Name is mandatory")
     private String name;
 
     @Column(name = "reason")
+    @NotEmpty(message = "Reason is mandatory")
     private String reason;
 
     @Column(name = "dosage")

@@ -1,6 +1,7 @@
 package com.health.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -19,6 +20,7 @@ public class PetVaccinations {
     private int vaccinationId;
 
     @Column(name = "vaccination_name")
+    @NotEmpty(message = "Name is mandatory")
     private String name;
 
     @Column(name = "vaccination_date")

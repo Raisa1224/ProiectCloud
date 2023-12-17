@@ -2,6 +2,7 @@ package com.health.service;
 
 import com.health.entity.PetSpecialConditions;
 import com.health.entity.PetVaccinations;
+import com.health.exceptions.EntityAlreadyExistsException;
 import com.health.exceptions.NoEntityFoundException;
 import com.health.repository.PetVaccinationsRepository;
 import jakarta.transaction.Transactional;
@@ -47,6 +48,10 @@ public class PetVaccinationsService {
 
     @Transactional
     public PetVaccinations addVaccination(PetVaccinations petVaccinations){
+        Optional<PetVaccinations> existing = petVaccinationsRepository.findByNameAndDateAndDoseAndTotalDoses(petVaccinations.getName(), petVaccinations.getDate(), petVaccinations.getDose(), petVaccinations.getTotalDoses());
+        if(existing.isPresent()){
+            throw new EntityAlreadyExistsException("Vaccination was already added");
+        }
         return petVaccinationsRepository.save(petVaccinations);
     }
 
@@ -54,6 +59,10 @@ public class PetVaccinationsService {
     public PetVaccinations editVaccination(Integer vaccinationId, String name, Date date, Integer dose, Integer totalDoses){
         Optional<PetVaccinations> old = petVaccinationsRepository.findById(vaccinationId);
         if(old.isPresent()){
+            Optional<PetVaccinations> existing = petVaccinationsRepository.findByNameAndDateAndDoseAndTotalDoses(name, date,dose, totalDoses);
+            if(existing.isPresent()){
+                throw new EntityAlreadyExistsException("Vaccination was already added");
+            }
             petVaccinationsRepository.editVaccination(vaccinationId, name, date, dose, totalDoses);
         }
         else{

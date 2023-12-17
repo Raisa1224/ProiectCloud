@@ -1,6 +1,7 @@
 package com.health.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Entity
@@ -16,6 +17,7 @@ public class PetSpecialConditions {
     private int conditionId;
 
     @Column(name = "condition_name")
+    @NotEmpty(message = "Name is mandatory")
     private String name;
 
     @Column(name = "condition_description")
