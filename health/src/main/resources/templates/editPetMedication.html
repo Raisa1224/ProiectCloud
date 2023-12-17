@@ -12,7 +12,7 @@
 
 </head>
 <body>
-
+<div th:replace="~{/header :: header}"></div>
 <form enctype="multipart/form-data" method="post" th:action="@{'/medications/editMedication/' + ${medication.medicationId}}" th:object="${medication}">
     <div class="container" style="margin-top: 50px">
         <div class="panel panel-default">
