@@ -69,11 +69,26 @@ public class SpeciesController {
 
     @PostMapping("/editSpecies/{speciesId}")
     public String editSpecies(@PathVariable("speciesId") Integer speciesId,
-                              @ModelAttribute Species newSpecies,
+                              @ModelAttribute("species") @Valid Species species,
+                              BindingResult result,
                               Model model) {
-        Species updatedSpecies = speciesService.editSpecies(speciesId, newSpecies);
-        model.addAttribute("species", updatedSpecies);
-        return "redirect:/species/getAllSpecies";
-    }
 
+        Species old = speciesService.getSpeciesById(speciesId);
+        species.setSpecies_id(old.getSpecies_id());
+
+        if (result.hasErrors()) {
+            return "speciesUpdate";
+        }
+
+        try{
+            Species updatedSpecies = speciesService.editSpecies(speciesId, species);
+            model.addAttribute("species", updatedSpecies);
+        }catch (Exception exception){
+            result.reject("globalError", exception.getMessage());
+            return "speciesUpdate";
+        }
+
+        return "redirect:/species/getAllSpecies";
+
+    }
 }

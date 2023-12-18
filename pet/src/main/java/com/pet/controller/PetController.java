@@ -178,7 +178,7 @@ public class PetController {
     }
 
     @PutMapping("/editPetId/{petId}")
-    public ResponseEntity<Pet> editPetId(@PathVariable Integer petId, @RequestBody Pet newPet){
+    public ResponseEntity<Pet> editPetId(@PathVariable Integer petId, @RequestBody @Valid Pet newPet){
         return ResponseEntity.ok(petService.editPet(petId, newPet));
     }
 
@@ -197,7 +197,7 @@ public class PetController {
     // functionality must be checked
     @PostMapping("/editPet/{petId}")
     public String editPet(@PathVariable("petId") Integer petId,
-                              @ModelAttribute("pet") Pet pet,
+                              @ModelAttribute("pet") @Valid Pet pet,
                           BindingResult bindingResult) {
 
         Pet old = petService.getPetById(petId);

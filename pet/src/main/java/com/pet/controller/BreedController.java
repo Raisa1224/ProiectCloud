@@ -69,11 +69,25 @@ public class BreedController {
 
     @PostMapping("/editBreed/{breedId}")
     public String updateBreed(@PathVariable("breedId") Integer breedId,
-                              @ModelAttribute Breed newBreed,
+                              @ModelAttribute ("breed") @Valid Breed breed,
+                              BindingResult result,
                               Model model) {
-        Breed updatedBreed = breedService.editBreed(breedId, newBreed);
-        model.addAttribute("breed", updatedBreed);
-        return "redirect:/breed/getAllBreeds";
-    }
 
+        Breed old = breedService.getBreedById(breedId);
+        breed.setBreed_id(old.getBreed_id());
+
+        if (result.hasErrors()) {
+            return "breedUpdate";
+        }
+
+        try{
+            Breed updatedBreed = breedService.editBreed(breedId, breed);
+            model.addAttribute("breed", updatedBreed);
+        }catch (Exception exception){
+            result.reject("globalError", exception.getMessage());
+            return "breedUpdate";
+        }
+        return "redirect:/breed/getAllBreeds";
+
+    }
 }

@@ -13,7 +13,7 @@
 
 <body>
 <div th:replace="~{/header :: header}"></div>
-<form enctype="multipart/form-data" th:action="@{/species/editSpecies/{speciesId}(speciesId=${species.species_id})}" method="post">
+<form enctype="multipart/form-data" th:action="@{'/species/editSpecies/' + ${species.species_id}}" th:object="${species}" method="post">
     <div class="container" style="margin-top: 50px">
         <div class="panel panel-default">
             <div  class="panel-heading">
@@ -24,13 +24,19 @@
                     <div class="col-md-10 ">
                         <div class="form-row">
                             <label for="speciesName">Name:</label><br>
-                            <input class="form-control" type="text" id="speciesName" name="speciesName" th:value="${species.speciesName}"/>
+                            <input class="form-control" id="speciesName" th:field="*{speciesName}" type="text"/>
+                            <p style="color: crimson" th:if="${#fields.hasErrors('speciesName')}"
+                               th:text="${#strings.listJoin(#fields.errors('speciesName'), ', ')}"
+                               class="text-danger"></p>
                             <br>
                         </div>
                         <div class="form-row">
                             <label for="speciesDescription">Description:</label><br>
-                            <input class="form-control" type="text" id="speciesDescription" name="speciesDescription" th:value="${species.speciesDescription}"/>
-                            <br>
+                            <input class="form-control" id="speciesDescription" th:field="*{speciesDescription}" type="text"/>
+                            <p style="color: crimson" th:if="${#fields.hasErrors('speciesDescription')}"
+                               th:text="${#strings.listJoin(#fields.errors('speciesDescription'), ', ')}"
+                               class="text-danger"></p>
+                           <br>
                         </div>
                     </div>
                 </div>

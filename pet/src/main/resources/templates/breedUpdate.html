@@ -13,7 +13,7 @@
 
 <body>
 <div th:replace="~{/header :: header}"></div>
-<form enctype="multipart/form-data" th:action="@{/breed/editBreed/{breedId}(breedId=${breed.breed_id})}" method="post">
+<form enctype="multipart/form-data" th:action="@{'/breed/editBreed/' + ${breed.breed_id}}" th:object="${breed}" method="post">
     <div class="container" style="margin-top: 50px">
         <div class="panel panel-default">
             <div  class="panel-heading">
@@ -24,17 +24,27 @@
                     <div class="col-md-10 ">
                         <div class="form-row">
                             <label for="breedName">Name:</label><br>
-                            <input class="form-control" type="text" id="breedName" name="breedName" th:value="${breed.breedName}"/>
+                            <input class="form-control" id="breedName" th:field="*{breedName}" type="text"/>
+                            <p style="color: crimson" th:if="${#fields.hasErrors('breedName')}"
+                               th:text="${#strings.listJoin(#fields.errors('breedName'), ', ')}"
+                               class="text-danger"></p>
                             <br>
                         </div>
                         <div class="form-row">
                             <label for="breedDescription">Description:</label><br>
-                            <input class="form-control" type="text" id="breedDescription" name="breedDescription" th:value="${breed.breedDescription}"/>
+                            <input class="form-control" id="breedDescription" th:field="*{breedDescription}" type="text"/>
+                            <p style="color: crimson" th:if="${#fields.hasErrors('breedDescription')}"
+                               th:text="${#strings.listJoin(#fields.errors('breedDescription'), ', ')}"
+                               class="text-danger"></p>
                             <br>
                         </div>
                         <div class="form-row">
                             <label for="lifespan">Lifespan:</label><br>
-                            <input class="form-control" type="text" id="lifespan" name="lifespan" th:value="${breed.lifespan}"/>
+                            <input class="form-control" id="lifespan" th:field="*{lifespan}" type="text"/>
+                            <p style="color: crimson" th:if="${#fields.hasErrors('lifespan')}"
+                               th:text="${#strings.listJoin(#fields.errors('lifespan'), ', ')}"
+                               class="text-danger"></p>
+                            <br>
                             <br>
                         </div>
                     </div>
