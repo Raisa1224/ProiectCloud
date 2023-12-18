@@ -27,10 +27,10 @@
                         <h6 class="panel-title" th:text="${'Owner: ' + getPet.owner.firstname + ' ' + getPet.owner.lastname}"></h6>
                         <br>
                         <a class="btn btn-primary" th:href="@{'http://localhost:8082/adoption/addAdoptionForm/' + ${getPet.petId}}">Adopt</a>
-                        <a class="btn btn-primary" th:href="@{'http://localhost:8080/medications/add/' + ${getPet.petId}}">Add a medication</a>
-                        <a class="btn btn-primary" th:href="@{'http://localhost:8080/conditions/add/' + ${getPet.petId}}">Add a condition</a>
-                        <a class="btn btn-primary" th:href="@{'http://localhost:8080/vaccinations/add/' + ${getPet.petId}}">Add a vaccination</a>
-                        <a class="btn btn-primary" th:href="@{'http://localhost:8080/veterinaryvisits/add/' + ${getPet.petId}}">Add a veterinary visit</a>
+                        <a class="btn btn-primary" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/medications/add/' + ${getPet.petId}}">Add a medication</a>
+                        <a class="btn btn-primary" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/conditions/add/' + ${getPet.petId}}">Add a condition</a>
+                        <a class="btn btn-primary" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/vaccinations/add/' + ${getPet.petId}}">Add a vaccination</a>
+                        <a class="btn btn-primary" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/veterinaryvisits/add/' + ${getPet.petId}}">Add a veterinary visit</a>
                     </div>
                     <br>
                     <br><h4 th:text="${'Pet Health Overview'}"></h4>

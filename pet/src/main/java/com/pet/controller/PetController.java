@@ -39,6 +39,12 @@ public class PetController {
     @Autowired
     private SpeciesService speciesService;
 
+    @GetMapping("/getOwnerIdForPet/{petId}")
+    public ResponseEntity<Integer> getOwnerIdForPet(@PathVariable Integer petId){
+        Pet pet = petService.getPetById(petId);
+        System.out.println(pet);
+        return ResponseEntity.ok(pet.getOwner().getUserId());
+    }
     @RequestMapping("/getAllPets")
     public String getAllPets(Model model,
                                 @RequestParam("page") Optional<Integer> page,
@@ -113,9 +119,13 @@ public class PetController {
         );
         model.addAttribute("veterinaryVisitsTable",tableVeterinaryVisits.getBody());
 
+        String idString = redisService.getData("userId");
+        Integer loggedInUser = Integer.valueOf(idString);
+
         Pet idPet = petService.getPetById(petId);
         model.addAttribute("getPet",
                 idPet);
+        model.addAttribute("loggedInUser", loggedInUser);
         return "petDetails";
     }
 

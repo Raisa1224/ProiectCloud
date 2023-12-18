@@ -15,7 +15,7 @@
         <td th:text="${vaccination.dose}"> Dose </td>
         <td th:text="${vaccination.totalDoses}"> Total doses </td>
 
-        <td><a href="#" th:href="@{${HEALTH} + '/vaccinations/edit/' + ${vaccination.vaccinationId}}"><i class="fas fa-pen mx-1"></i></a></td>
-        <td><a href="#" th:href="@{${HEALTH} + '/vaccinations/delete/'  + ${vaccination.vaccinationId}}"><i class="fas fa-trash mx-1"></i></a></td>
+        <td><a href="#" th:if="${loggedInUser}" th:href="@{${HEALTH} + '/vaccinations/edit/' + ${vaccination.vaccinationId}}"><i class="fas fa-pen mx-1"></i></a></td>
+        <td><a href="#" th:if="${loggedInUser}" th:href="@{${HEALTH} + '/vaccinations/delete/'  + ${vaccination.vaccinationId}}"><i class="fas fa-trash mx-1"></i></a></td>
     </tr>
 </table>

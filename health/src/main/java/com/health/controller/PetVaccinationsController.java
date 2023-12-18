@@ -4,6 +4,7 @@ import com.health.constants.Constants;
 import com.health.entity.Pet;
 import com.health.entity.PetVaccinations;
 import com.health.service.PetVaccinationsService;
+import com.health.service.RedisService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -19,6 +21,10 @@ import java.util.List;
 public class PetVaccinationsController {
     @Autowired
     PetVaccinationsService petVaccinationsService;
+
+    @Autowired
+    RedisService redisService;
+
     @GetMapping
     public ResponseEntity<List<PetVaccinations>> getAllVaccinations(){
         return ResponseEntity.ok(petVaccinationsService.getAll());
@@ -43,8 +49,22 @@ public class PetVaccinationsController {
     public String getVaccinationsForPet(Model model, @PathVariable Integer petId){
         List<PetVaccinations> petVaccinations = petVaccinationsService.getAllVaccinationsForPet(petId);
 
+        String idString = redisService.getData("userId");
+        Integer loggedInUser = Integer.valueOf(idString);
+
+        RestTemplate restTemplate = new RestTemplate();
+        String ownerIdURL = Constants.PETS_BASE_URL + Constants.GET_OWNER_FOR_PET_URL + petId;
+        Integer ownerId = restTemplate.getForObject(ownerIdURL, Integer.class);
+
+        System.out.println("IDS" + loggedInUser + " " + ownerId);
+        Boolean logged = true;
+        if(ownerId!=loggedInUser){
+            logged = false;
+        }
+
         model.addAttribute("vaccinations", petVaccinations);
         model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
+        model.addAttribute("loggedInUser", logged);
 
         return "/getAllPetVaccinationsForPet";
     }
