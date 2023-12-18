@@ -15,12 +15,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class AdoptionRequestService {
     @Autowired
     private AdoptionRequestRepository adoptionRequestRepository;
+
+    @Autowired
+    private RedisService redisService;
 
     public List<AdoptionRequest> getAllAdoptionRequests(){
         return adoptionRequestRepository.findAll();
@@ -53,6 +57,13 @@ public class AdoptionRequestService {
         if (adoptionRequest.getClient() == null) {
             throw new UserNotFoundException("Client must be present for adoption");
         }
+        if (!getAdoptionRequestByPet(adoptionRequest.getPet().getPetId()).isEmpty()) {
+            throw new PetAlreadyAdoptedException(String.format("Pet %s is already adopted", adoptionRequest.getPet().getPetId()));
+        }
+        String userId = redisService.getData("userId");
+        if (Objects.equals(adoptionRequest.getPet().getOwner().getUserId(), Integer.valueOf(userId))) {
+            throw new PetAlreadyAdoptedException("As an owner, you cannot adopt your own pet.");
+        }
         RestTemplate restTemplate = new RestTemplate();
         // Change the available field in pet
         Pet newPet = adoptionRequest.getPet();
@@ -69,9 +80,6 @@ public class AdoptionRequestService {
                 });
         adoptionRequest.setAdoptionDate(new Date());
         adoptionRequest.setPet(editedPet.getBody());
-        if (!getAdoptionRequestByPet(editedPet.getBody().getPetId()).isEmpty()) {
-            throw new PetAlreadyAdoptedException(String.format("Pet %s is already adopted", editedPet.getBody().getPetName()));
-        }
         return adoptionRequestRepository.save(adoptionRequest);
     }
 
