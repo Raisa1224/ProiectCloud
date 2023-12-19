@@ -34,6 +34,37 @@
         .highlight-text{
             color: darkred;
         }
+        .btn-add {
+            background-color: darkslategrey;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 15px;
+            margin: 4px 1px;
+            cursor: pointer;
+        }
+        .btn-add:hover {
+            background-color: darkcyan;
+            color: white;
+        }
+        .error-message {
+            width: 100%;
+            color: #fff;
+            background-color: #c50202;
+            margin-top: 5px;
+            padding: 8px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+        .error-message.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -49,7 +80,7 @@
             <div class="panel-body">
                 <div th:if="${#fields.hasErrors('global')}" class="text-center">
                     <h3>There was an error processing the adoption:</h3>
-                    <p th:each="exception : ${#fields.errors('global')}" th:text="${exception}" class="text-danger"></p>
+                    <p th:each="exception : ${#fields.errors('global')}" th:text="${exception}" class="error-message show"></p>
                 </div>
 
                 <p class="adoption-info">
@@ -66,7 +97,7 @@
                     </label>
                     <p th:if="${#fields.hasErrors('comments')}"
                        th:text="${#strings.listJoin(#fields.errors('comments'), ', ')}"
-                       class="text-danger"></p>
+                       class="error-message show" ></p>
                     <input type="hidden" th:field="*{pet.petId}" />
                     <input type="hidden" th:field="*{pet.petName}" />
                     <input type="hidden" th:field="*{pet.price}" />
@@ -82,7 +113,7 @@
                     <input type="hidden" th:field="*{client.userId}" />
                 </div>
                 <div class="text-center">
-                    <button class="btn btn-primary" type="submit">Adopt pet</button>
+                    <button class="btn btn-add" type="submit">Adopt pet</button>
                 </div>
             </div>
         </div>

@@ -49,6 +49,42 @@
       font-weight: bold;
       text-align: center;
     }
+    .title-elem {
+      color: #009478;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+      margin-bottom: 15px;
+    }
+    .btn-add {
+      background-color: darkslategrey;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 15px;
+      margin: 4px 1px;
+      cursor: pointer;
+    }
+    .btn-add:hover {
+      background-color: darkcyan;
+      color: white;
+    }
+    .error-message {
+      width: 100%;
+      color: #fff;
+      background-color: #c50202;
+      margin-top: 5px;
+      padding: 8px;
+      border-radius: 5px;
+      opacity: 0;
+      transition: opacity 0.3s ease-in-out;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    }
+    .error-message.show {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -64,13 +100,13 @@
       <div class="panel-body">
         <div th:if="${#fields.hasErrors('global')}">
           <h3>Errors:</h3>
-          <p th:each="exception : ${#fields.errors('global')}" th:text="${exception}" class="text-danger"></p>
+          <p th:each="exception : ${#fields.errors('global')}" th:text="${exception}" class="error-message show"></p>
         </div>
 
         <div class="form-group">
           <div class="flex-container">
             <div class="flex-item">
-              <h3 style="text-decoration: underline">Billing Address:</h3>
+              <h4 class="title-elem" style="text-decoration: underline">Billing Address:</h4>
               <div>
                 <label for="email">Email:
                   <input type="text" id="email" th:field="*{email}" th:value="${paymentDto.email}" readonly/>
@@ -84,14 +120,14 @@
             </div>
 
             <div class="flex-item">
-              <h3 style="text-decoration: underline">Payment:</h3>
+              <h4 class="title-elem" style="text-decoration: underline">Payment:</h4>
               <div>
                 <label for="cardNumber">Card Number:
                   <input type="text" id="cardNumber" th:field="*{cardNumber}" placeholder="1111-2222-3333-4444"/>
                 </label>
                 <p th:if="${#fields.hasErrors('cardNumber')}"
                    th:text="${#strings.listJoin(#fields.errors('cardNumber'), ', ')}"
-                   class="text-danger"></p>
+                   class="error-message show"></p>
               </div>
               <div>
                 <label for="cardHolderName">Cardholder Name:
@@ -99,7 +135,7 @@
                 </label>
                 <p th:if="${#fields.hasErrors('cardHolderName')}"
                    th:text="${#strings.listJoin(#fields.errors('cardHolderName'), ', ')}"
-                   class="text-danger"></p>
+                   class="error-message show"></p>
               </div>
               <div>
                 <label for="expirationDate">Expiration Date:
@@ -107,7 +143,7 @@
                 </label>
                 <p th:if="${#fields.hasErrors('expirationDate')}"
                    th:text="${#strings.listJoin(#fields.errors('expirationDate'), ', ')}"
-                   class="text-danger"></p>
+                   class="error-message show"></p>
               </div>
               <div>
                 <label for="cvv">CVV:
@@ -115,7 +151,7 @@
                 </label>
                 <p th:if="${#fields.hasErrors('cvv')}"
                    th:text="${#strings.listJoin(#fields.errors('cvv'), ', ')}"
-                   class="text-danger"></p>
+                   class="error-message show"></p>
               </div>
             </div>
           </div>
@@ -126,7 +162,7 @@
           Amount to pay for adoption: <span class="highlight-text" th:text="${paymentDto.amount}">0</span> EURO
         </p>
         <div class="text-center">
-          <button class="btn btn-primary" type="submit">Submit Payment</button>
+          <button class="btn btn-add" type="submit">Submit Payment</button>
         </div>
       </div>
     </div>

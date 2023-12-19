@@ -9,6 +9,36 @@
           crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
     <style>
+        th {
+            border: 1px solid white;
+            padding: 10px;
+            background-color: #008080;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        th, td {
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        a {
+            text-decoration: none;
+            color: darkcyan;
+            text-align: center;
+            display: block;
+        }
+        a:hover {
+            color: darkslategrey;
+        }
         .container {
             margin-bottom: 30px;
         }
@@ -46,13 +76,13 @@
             <th>Pet</th>
             <th>Adoption Date</th>
             <th>Client</th>
+            <th>Info</th>
         </tr>
         </thead>
-        <tr th:each="adoption, stat : ${adoptionRequests}"
-            th:class="${stat.odd}? 'table-light':'table-dark'">
+        <tr th:each="adoption, stat : ${adoptionRequests}">
             <td th:text="${adoption.pet.petName}">Pet</td>
             <td th:text="${#strings.substring(adoption.adoptionDate, 0, 10)}">Adoption Date</td>
-            <td th:text="${adoption.client.firstname + ' ' + adoption.client.lastname}">Owner</td>
+            <td th:text="${adoption.client.firstname + ' ' + adoption.client.lastname}">Client</td>
             <td><a th:href="@{'/adoption/getAdoptionForOwner/' + ${adoption.adoptionRequestId}}"><i class="fas fa-info-circle mx-1"></i></a></td>
         </tr>
     </table>

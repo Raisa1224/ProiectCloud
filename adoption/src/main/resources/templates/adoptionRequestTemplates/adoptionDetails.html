@@ -28,9 +28,6 @@
         .panel-body {
             padding: 20px;
         }
-        .detail-info{
-            font-weight: bold;
-        }
         .feedbacks-section {
             margin-top: 20px;
         }
@@ -43,11 +40,15 @@
             gap: 5px;
         }
         .feedback-item {
-            border: 1px solid darkgrey;
+            border: 1px solid darkslategrey;
             margin: 10px;
             padding: 10px 10px 0;
             position: relative;
             width: 46%;
+            background-color: #F2FAFA;
+        }
+        .feedback-content {
+            margin-bottom: 5px;
         }
         .delete-link {
             color: red;
@@ -66,10 +67,6 @@
         }
         .edit-link:hover, .delete-link:hover {
             text-decoration: underline;
-        }
-        .feedback-content {
-            font-weight: bold;
-            margin-bottom: 5px;
         }
         .date {
             position: absolute;
@@ -95,9 +92,43 @@
             box-sizing: border-box;
             font-size: 12px;
         }
-        .btn-feedback{
+        .detail-info{
+            margin-left: 5%;
+        }
+        .btn-add {
+            background-color: darkslategrey;
+            color: white;
+            border: none;
             font-size: 12px;
             margin-top: 15px;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .btn-add:hover {
+            background-color: darkcyan;
+            color: white;
+        }
+        .error-message {
+            width: 100%;
+            color: #fff;
+            background-color: #c50202;
+            margin-top: 5px;
+            padding: 8px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+        .error-message.show {
+            opacity: 1;
+        }
+        .title-text{
+            color:#008080;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -110,19 +141,19 @@
         </div>
 
         <div class="panel-body">
-                <p class="detail-info">Pet Name: <span th:text="${adoption.pet.petName}"></span></p>
-                <p class="detail-info">Adoption Date: <span th:text="${#strings.substring(adoption.adoptionDate, 0, 10)}"></span></p>
-                <p class="detail-info">Owner: <span  th:text="${adoption.pet.owner.firstname + ' ' + adoption.pet.owner.lastname}"></span></p>
-                <p class="detail-info">Client: <span  th:text="${adoption.client.firstname + ' ' + adoption.client.lastname}"></span></p>
-                <p class="detail-info">Amount: <span th:text="${adoption.pet.price}"></span></p>
-                <p class="detail-info">Feedback for this adoption:</p>
+            <p class="detail-info"><span class="title-text">Pet Name: </span> <span th:text="${adoption.pet.petName}"></span></p>
+                <p class="detail-info"> <span class="title-text"> Adoption Date: </span> <span th:text="${#strings.substring(adoption.adoptionDate, 0, 10)}"></span></p>
+                <p class="detail-info"><span class="title-text">Owner: </span> <span  th:text="${adoption.pet.owner.firstname + ' ' + adoption.pet.owner.lastname}"></span></p>
+                <p class="detail-info"><span class="title-text">Client: </span> <span  th:text="${adoption.client.firstname + ' ' + adoption.client.lastname}"></span></p>
+                <p class="detail-info"><span class="title-text">Amount: </span> <span th:text="${adoption.pet.price}"></span></p>
+                <p class="detail-info"><span class="title-text">Feedback for this adoption: </span> </p>
 
                 <div class="feedbacks-section">
                     <ul class="feedback-list">
                         <li th:each="feedback : ${feedbacks}" class="feedback-item">
-                            <p><span class="feedback-content">Comment:</span> <span th:text="${feedback.content}" class="feedback-content"></span></p>
-                            <p><span class="feedback-content">Rating:</span> <span th:text="${feedback.rating}" class="feedback-content"></span></p>
-                            <p><span class="feedback-content date">Date: <span th:text="${#strings.substring(feedback.feedbackDate, 0, 10)}"></span> </span></p>
+                            <p><span class="feedback-content title-text">Comment:</span> <span th:text="${feedback.content}" class="feedback-content"></span></p>
+                            <p><span class="feedback-content title-text">Rating:</span> <span th:text="${feedback.rating}" class="feedback-content"></span></p>
+                            <p><span class="feedback-content title-text date">Date: <span th:text="${#strings.substring(feedback.feedbackDate, 0, 10)}"></span> </span></p>
                             <span>
                                 <a th:href="@{'/feedback/editFeedbackFrom/' + ${feedback.feedbackId}}" class="edit-link"><i class="fas fa-edit mx-1"></i></a>
                                 <a th:href="@{'/feedback/deleteFeedbackById/' + ${adoption.adoptionRequestId} + '/' + ${feedback.feedbackId}}" class="delete-link"><i class="fas fa-trash mx-1"></i></a>
@@ -130,11 +161,11 @@
                         </li>
                     </ul>
                     <form th:action="@{'/feedback/' + ${adoption.adoptionRequestId}}" method="post" class="feedback-form">
-                        <label for="content" class="form-label">Content:
+                        <label for="content" class="form-label"> <span class="title-text">Content:</span>
                             <input type="text" id="content" name="content" class="form-input"/>
                         </label>
 
-                    <label for="rating" class="form-label">Rating:
+                    <label for="rating" class="form-label"> <span class="title-text">Rating:</span>
                         <select id="rating" name="rating" class="form-select">
                             <option value="1">1</option>
                             <option value="2">2</option>
@@ -143,11 +174,11 @@
                             <option value="5">5</option>
                         </select>
                     </label>
-                <button type="submit" class="btn btn-primary btn-feedback">+</button>
+                <button type="submit" class="btn btn-primary btn-add">+</button>
             </form>
                     <p th:if="${contentErrorMessage}"
                        th:text="${contentErrorMessage}"
-                       class="text-danger text-center"></p>
+                       class="error-message show text-center"></p>
         </div>
         </div>
     </div>

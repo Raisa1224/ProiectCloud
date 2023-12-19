@@ -12,6 +12,9 @@
         .container {
             margin-bottom: 30px;
         }
+        .detail-info{
+            margin-left: 5s%;
+        }
         .panel {
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
@@ -28,9 +31,6 @@
         .panel-body {
             padding: 20px;
         }
-        .detail-info{
-            font-weight: bold;
-        }
         .feedbacks-section {
             margin-top: 20px;
         }
@@ -43,10 +43,24 @@
             gap: 5px;
         }
         .feedback-item {
-            border: 1px solid darkgrey;
-            padding: 10px;
+            border: 1px solid darkslategrey;
+            margin: 10px;
+            padding: 10px 10px 0;
             position: relative;
-            width: 48%;
+            width: 46%;
+            background-color: #F2FAFA;
+        }
+        .feedback-content {
+            margin-bottom: 5px;
+        }
+        .date {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .title-text{
+            color:#008080;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -59,22 +73,22 @@
         </div>
 
         <div class="panel-body">
-                <p class="detail-info">Pet Name: <span th:text="${adoption.pet.petName}"></span></p>
-                <p class="detail-info">Adoption Date: <span th:text="${#strings.substring(adoption.adoptionDate, 0, 10)}"></span></p>
-                <p class="detail-info">Owner: <span  th:text="${adoption.pet.owner.firstname + ' ' + adoption.pet.owner.lastname}"></span></p>
-                <p class="detail-info">Client: <span  th:text="${adoption.client.firstname + ' ' + adoption.client.lastname}"></span></p>
-                <p class="detail-info">Amount: <span th:text="${adoption.pet.price}"></span></p>
-                <p class="detail-info">Feedback for this adoption:</p>
+            <p class="detail-info"><span class="title-text">Pet Name: </span> <span th:text="${adoption.pet.petName}"></span></p>
+            <p class="detail-info"> <span class="title-text"> Adoption Date: </span> <span th:text="${#strings.substring(adoption.adoptionDate, 0, 10)}"></span></p>
+            <p class="detail-info"><span class="title-text">Owner: </span> <span  th:text="${adoption.pet.owner.firstname + ' ' + adoption.pet.owner.lastname}"></span></p>
+            <p class="detail-info"><span class="title-text">Client: </span> <span  th:text="${adoption.client.firstname + ' ' + adoption.client.lastname}"></span></p>
+            <p class="detail-info"><span class="title-text">Amount: </span> <span th:text="${adoption.pet.price}"></span></p>
+            <p class="detail-info"><span class="title-text">Feedback for this adoption: </span> </p>
 
                 <div class="feedbacks-section">
                     <ul class="feedback-list">
                         <li th:each="feedback : ${feedbacks}" class="feedback-item">
-                            <p>Rating: <span th:text="${feedback.content}" class="feedback-content"></span></p>
-                            <p>Rating: <span th:text="${feedback.rating}" class="feedback-content"></span></p>
-                            <p>Date: <span th:text="${#strings.substring(feedback.feedbackDate, 0, 10)}" class="feedback-content"></span></p>
-                         </li>
+                            <p><span class="feedback-content title-text">Comment:</span> <span th:text="${feedback.content}" class="feedback-content"></span></p>
+                            <p><span class="feedback-content title-text">Rating:</span> <span th:text="${feedback.rating}" class="feedback-content"></span></p>
+                            <p><span class="feedback-content title-text date">Date: <span th:text="${#strings.substring(feedback.feedbackDate, 0, 10)}"></span> </span></p>
+                        </li>
                     </ul>
-        </div>
+                </div>
         </div>
     </div>
 
