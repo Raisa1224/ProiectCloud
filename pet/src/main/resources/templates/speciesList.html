@@ -9,37 +9,149 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
           crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        .table {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .table thead {
+            background: darkslategrey;
+            color: white;
+            border-bottom: 2px solid white;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .table th {
+            border: 1px solid white;
+            padding: 10px;
+            background-color: darkslategrey;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .table tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table th, .table td {
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .table a {
+            text-decoration: none;
+            color: darkcyan;
+        }
+
+        .table a:hover {
+            color: darkslategrey;
+        }
+
+        .table i {
+            display: block;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .btn-add {
+            background-color: darkslategrey;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 15px;
+            margin: 4px 1px;
+            cursor: pointer;
+        }
+
+        .btn-add:hover {
+            background-color: darkcyan;
+            color: white;
+        }
+
+        .pagination .page-link {
+            color: darkslategrey;
+            border-color: #34495e;
+            border-radius: 10px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: darkslategrey;
+            border-color: #34495e;
+            color: white;
+            margin-right: 10px;
+            margin-left: 10px;
+        }
+
+        .pagination .page-item.active .page-link:hover {
+            background-color: darkcyan;
+            color: #ecf0f1;
+            border-color: darkcyan;
+        }
+
+        .pagination .page-item.next a {
+            background-color: darkslategrey;
+            color: white;
+            border: 1px solid darkslategrey;
+            padding: 8px 16px;
+            border-radius: 5px;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .pagination .page-item.next a:hover {
+            background-color: darkcyan;
+            color: white;
+            border-color: darkcyan;
+        }
+
+        .navigationSpace{
+            padding-top: 15px;
+        }
+    </style>
+
 </head>
 
 <body>
 <div th:replace="~{/header :: header}"></div>
-<div class="container" style="margin-top: 50px"><br>
-    <div class="col-md-2 ml-md-auto">
-        <a class="nav-link btn btn-primary text-white" type="button" th:href="@{'/species/add'}" >Add species</a>
-    </div><br>
+<div class="container" style="margin-top: 50px">
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-add" type="button" th:href="@{'/species/add'}" >Add species</a>
+    </div>
     <table class="table table-hover ">
         <thead class="thead-inverse">
         <tr>
             <th>Id</th>
             <th>Species name</th>
             <th>Species description</th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tr th:each="species : ${speciesPage.content}">
             <td th:text="${species.species_id}">Id</td>
             <td th:text="${species.speciesName}">Species name</td>
             <td th:text="${species.speciesDescription}">Species description</td>
-            <td></td>
-            <td><a href="#" th:href="@{'/species/edit/' + ${species.species_id}}"> <i class="fas fa-pen mx-1"></i> </a></td>
-            <td><a href="#" th:href="@{'/species/deleteSpecies/' + ${species.species_id}}"> <i class="fas fa-trash mx-1"></i> </a></td>
+            <td><a th:href="@{'/species/edit/' + ${species.species_id}}"> <i class="fas fa-pen mx-1"></i> </a></td>
+            <td><a th:href="@{'/species/deleteSpecies/' + ${species.species_id}}"> <i class="fas fa-trash mx-1"></i> </a></td>
         </tr>
     </table>
-    <nav th:if="${speciesPage.totalPages > 0}" aria-label="Page navigation example">
+    <nav class="navigationSpace" th:if="${speciesPage.totalPages > 0}" aria-label="Page navigation example">
         <ul  class="pagination">
-            <li class="page-item">
+            <li class="page-item next">
                 <a th:if="${speciesPage.number > 0}"
                    th:href="@{/species/getAllSpecies(size=${speciesPage.size}, page=${speciesPage.number})}"
                    class="page-link" >
@@ -54,7 +166,7 @@
                 </a></li>
             <li th:class="${speciesPage.number>6} ? 'page-item active':  'page-item'"
                 th:if="${speciesPage.totalPages > 6}"><a class="page-link" href="#">...</a></li>
-            <li th:if="${speciesPage.number < speciesPage.totalPages}" class="page-item">
+            <li th:if="${speciesPage.number < speciesPage.totalPages}" class="page-item next">
                 <a th:if="${speciesPage.number < speciesPage.totalPages -1}"
                    th:href="@{/species/getAllSpecies(size=${speciesPage.size}, page=${speciesPage.number+2})}"
                    class="page-link" >

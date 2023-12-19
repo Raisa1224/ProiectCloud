@@ -27,7 +27,7 @@ public class BreedController {
                                    @RequestParam("page") Optional<Integer> page,
                                    @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(20);
+        int pageSize = size.orElse(10);
 
         Page<Breed> breedPage = breedService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
 
