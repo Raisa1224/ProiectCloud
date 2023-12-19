@@ -11,72 +11,169 @@
           crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel="stylesheet" type="text/css" />
 
+    <style>
+        .subnav {
+            text-align: left;
+            margin-bottom: 30px;
+            margin-top: 30px;
+            margin-left: 30px;
+        }
+
+        .subnav a {
+            margin-right: -2px;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+        }
+
+        .subnav .btn-subnav {
+            background-color: #ce3513;
+            color: white;
+            padding: 7px 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+
+        .subnav .btn-subnav:hover {
+            background-color: #fd805a;
+            color: white;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .panel {
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .panel-heading {
+            background-color: #0b3b32;
+            color: #fff;
+            padding: 20px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .panel-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+
+        .panel-subtitle {
+            margin-left: 10px;
+            font-size: 17px;
+            color: #cbcbcb;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+        }
+
+        .container-fluid{
+            margin: 12%;
+            width: 91%;
+        }
+
+        h4 {
+            color: #009478;
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+            margin-bottom: 15px;
+        }
+
+        .pText {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            margin-left: -5px;
+        }
+
+        b {
+            color: #e85332;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .contentPage{
+            margin: 30px;
+        }
+    </style>
+
 </head>
 
 <body>
 <div th:replace="~{/header :: header}"></div>
-<div class="container " style="margin-top: 50px">
+
+<div class="container-fluid" style="margin-top: 40px">
     <div class="row align-self-center">
         <div class="col-md-10 col-md-offset-3">
             <div class="pannel-group">
                 <div class="panel pnel-primary">
                     <div class="panel-heading" >
                         <h1 class="panel-title" th:text="${getPet.petName}"></h1>
-                        <h6 class="panel-title" th:text="${'Species: ' + getPet.species.speciesName}"></h6>
-                        <h6 class="panel-title" th:text="${'Breed: ' + getPet.breed.breedName}"></h6>
-                        <h6 class="panel-title" th:text="${'Owner: ' + getPet.owner.firstname + ' ' + getPet.owner.lastname}"></h6>
+                        <h6 class="panel-subtitle" th:text="${'Species: ' + getPet.species.speciesName}"></h6>
+                        <h6 class="panel-subtitle" th:text="${'Breed: ' + getPet.breed.breedName}"></h6>
+                        <h6 class="panel-subtitle" th:text="${'Owner: ' + getPet.owner.firstname + ' ' + getPet.owner.lastname}"></h6>
+                    </div>
+                    <div class="subnav">
+                        <a class="btn btn-subnav" th:href="@{'http://localhost:8082/adoption/addAdoptionForm/' + ${getPet.petId}}">Adopt</a>
+                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/medications/add/' + ${getPet.petId}}">Add a medication</a>
+                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/conditions/add/' + ${getPet.petId}}">Add a condition</a>
+                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/vaccinations/add/' + ${getPet.petId}}">Add a vaccination</a>
+                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/veterinaryvisits/add/' + ${getPet.petId}}">Add a veterinary visit</a>
+                    </div>
+                    <div class="contentPage">
+                        <h4 th:text="${'Pet Health Overview'}"></h4>
+                        <p class="pText">
+                            <span th:text="${'Welcome to our Pet Details page, where we prioritize the well-being of your beloved companion. At '}"></span>
+                            <b th:text="${getPet.petName}"></b>
+                            <span th:text="${' personal health hub, we aim to provide you with a comprehensive insight into their medical journey.'}"></span>
+                        </p>
                         <br>
-                        <a class="btn btn-primary" th:href="@{'http://localhost:8082/adoption/addAdoptionForm/' + ${getPet.petId}}">Adopt</a>
-                        <a class="btn btn-primary" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/medications/add/' + ${getPet.petId}}">Add a medication</a>
-                        <a class="btn btn-primary" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/conditions/add/' + ${getPet.petId}}">Add a condition</a>
-                        <a class="btn btn-primary" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/vaccinations/add/' + ${getPet.petId}}">Add a vaccination</a>
-                        <a class="btn btn-primary" th:if="${getPet.owner.userId == loggedInUser}" th:href="@{'http://localhost:8080/veterinaryvisits/add/' + ${getPet.petId}}">Add a veterinary visit</a>
+                        <div>
+                            <p th:utext="${specialConditionsTable}"></p>
+                        </div>
+                        <br>
+                        <br><h4 th:text="${'Vaccination Chronicle'}"></h4>
+                        <p class="pText">
+                            <span th:text="${'Ensuring the optimal health of '}"></span>
+                            <b th:text="${getPet.petName}"></b>
+                            <span th:text="${', we have diligently maintained a record of vaccinations administered over time. From core vaccines safeguarding against common diseases to tailored preventive measures, each vaccine plays a crucial role in their ongoing health.'}"></span>
+                        </p>
+                        <br>
+                        <div>
+                            <p th:utext="${vaccinationTable}"></p>
+                        </div>
+                        <br>
+                        <br><h4 th:text="${'Medication Records'}"></h4>
+                        <p class="pText">
+                            <span th:text="${'In '}"></span>
+                            <b th:text="${getPet.petName}"></b>
+                            <span th:text="${' journey towards a healthy and happy life, we have maintained meticulous records of any prescribed medications. Whether addressing minor ailments or managing chronic conditions, every dose has been carefully documented to keep you informed about your pet healthcare regimen.'}"></span>
+                        </p>
+                        <br>
+                        <div>
+                            <p th:utext="${medicationTable}"></p>
+                        </div>
+                        <br>
+                        <br><h4 th:text="${'Veterinary Visits'}"></h4>
+                        <p class="pText">
+                            <span th:text="${'In '}"></span>
+                            <b th:text="${getPet.petName}"></b>
+                            <span th:text="${' journey towards a healthy and happy life, we have meticulously documented every veterinary visit. Whether it is a routine check-up or addressing specific health concerns, each visit plays a crucial role in maintaining your pet is well-being.'}"></span>
+                        </p>
+                        <br>
+                        <div>
+                            <p th:utext="${veterinaryVisitsTable}"></p>
+                        </div>
                     </div>
-                    <br>
-                    <br><h4 th:text="${'Pet Health Overview'}"></h4>
-                    <p>
-                        <span th:text="${'Welcome to our Pet Details page, where we prioritize the well-being of your beloved companion. At '}"></span>
-                        <b th:text="${getPet.petName}"></b>
-                        <span th:text="${' personal health hub, we aim to provide you with a comprehensive insight into their medical journey.'}"></span>
-                    </p>
-                    <br>
-                    <div>
-                        <p th:utext="${specialConditionsTable}"></p>
-                    </div>
-                    <br>
-                    <br><h4 th:text="${'Vaccination Chronicle'}"></h4>
-                    <p>
-                        <span th:text="${'Ensuring the optimal health of '}"></span>
-                        <b th:text="${getPet.petName}"></b>
-                        <span th:text="${', we have diligently maintained a record of vaccinations administered over time. From core vaccines safeguarding against common diseases to tailored preventive measures, each vaccine plays a crucial role in their ongoing health.'}"></span>
-                    </p>
-                    <br>
-                    <div>
-                        <p th:utext="${vaccinationTable}"></p>
-                    </div>
-                    <br>
-                    <br><h4 th:text="${'Medication Records'}"></h4>
-                    <p>
-                        <span th:text="${'In '}"></span>
-                        <b th:text="${getPet.petName}"></b>
-                        <span th:text="${' journey towards a healthy and happy life, we have maintained meticulous records of any prescribed medications. Whether addressing minor ailments or managing chronic conditions, every dose has been carefully documented to keep you informed about your pet healthcare regimen.'}"></span>
-                    </p>
-                    <br>
-                    <div>
-                        <p th:utext="${medicationTable}"></p>
-                    </div>
-                    <br>
-                    <br><h4 th:text="${'Veterinary Visits'}"></h4>
-                    <p>
-                        <span th:text="${'In '}"></span>
-                        <b th:text="${getPet.petName}"></b>
-                        <span th:text="${' journey towards a healthy and happy life, we have meticulously documented every veterinary visit. Whether it is a routine check-up or addressing specific health concerns, each visit plays a crucial role in maintaining your pet is well-being.'}"></span>
-                    </p>
-                    <br>
-                    <div>
-                        <p th:utext="${veterinaryVisitsTable}"></p>
-                    </div>
-                    <br>
                 </div>
             </div>
         </div>

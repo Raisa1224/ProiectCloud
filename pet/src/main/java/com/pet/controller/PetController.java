@@ -42,7 +42,6 @@ public class PetController {
     @GetMapping("/getOwnerIdForPet/{petId}")
     public ResponseEntity<Integer> getOwnerIdForPet(@PathVariable Integer petId){
         Pet pet = petService.getPetById(petId);
-        System.out.println(pet);
         return ResponseEntity.ok(pet.getOwner().getUserId());
     }
     @RequestMapping("/getAllPets")
