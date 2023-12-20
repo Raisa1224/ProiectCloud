@@ -14,7 +14,7 @@ public interface PetSpecialConditionsRepository extends JpaRepository<PetSpecial
 
     Optional<PetSpecialConditions> findById(Integer id);
 
-    Optional<PetSpecialConditions> findByName(String name);
+    Optional<PetSpecialConditions> findByNameAndDescriptionAndObservations(String name, String description, String observations);
     @Query("SELECT p FROM PetSpecialConditions p WHERE p.pet.petId = :petId")
     List<PetSpecialConditions> findByPetId(Integer petId);
 

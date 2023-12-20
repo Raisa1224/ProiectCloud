@@ -51,7 +51,7 @@ public class PetMedicationsService {
 
     @Transactional
     public PetMedications addMedication(PetMedications petMedications){
-        Optional<PetMedications> existing = petMedicationsRepository.findByNameAndReasonAndDosageAndFrequencyDays(petMedications.getName(), petMedications.getReason(), petMedications.getDosage(), petMedications.getFrequencyDays());
+        Optional<PetMedications> existing = petMedicationsRepository.findByNameAndReasonAndDosageAndFrequencyDaysAndObservations(petMedications.getName(), petMedications.getReason(), petMedications.getDosage(), petMedications.getFrequencyDays(), petMedications.getObservations());
         if(existing.isPresent()){
             throw new EntityAlreadyExistsException("Medication was already added");
         }
@@ -62,7 +62,7 @@ public class PetMedicationsService {
     public PetMedications editMedication(Integer medication, Integer dosage, Integer frequencyDays, String name, String reason, String observations){
         Optional<PetMedications> oldMedication = petMedicationsRepository.findById(medication);
         if(oldMedication.isPresent()){
-            Optional<PetMedications> existing = petMedicationsRepository.findByNameAndReasonAndDosageAndFrequencyDays(name, reason, dosage, frequencyDays);
+            Optional<PetMedications> existing = petMedicationsRepository.findByNameAndReasonAndDosageAndFrequencyDaysAndObservations(name, reason, dosage, frequencyDays, observations);
             if(existing.isPresent()){
                 throw new EntityAlreadyExistsException("Medication was already added");
             }
