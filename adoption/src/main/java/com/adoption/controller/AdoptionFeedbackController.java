@@ -1,7 +1,6 @@
 package com.adoption.controller;
 
 import com.adoption.entity.AdoptionFeedback;
-import com.adoption.entity.AdoptionRequest;
 import com.adoption.service.AdoptionFeedbackService;
 import com.adoption.service.AdoptionRequestService;
 import jakarta.validation.Valid;
@@ -79,22 +78,22 @@ public class AdoptionFeedbackController {
     @RequestMapping("/editFeedbackFrom/{feedbackId}")
     public String editFeedbackForm(@PathVariable Integer feedbackId, Model model) {
         model.addAttribute("feedback", adoptionFeedbackService.getAdoptionFeedbackById(feedbackId));
-        return "/feedbackTemplates/editFeedback";
+        return "feedbackTemplates/editFeedback";
     }
 
     @PostMapping("/editFeedback/{feedbackId}")
-    public String editCage(@PathVariable Integer feedbackId,
+    public String editFeedback(@PathVariable Integer feedbackId,
                            @ModelAttribute("feedback") @Valid AdoptionFeedback adoptionFeedback,
                            BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
-            return "/feedbackTemplates/editFeedback";
+            return "feedbackTemplates/editFeedback";
         }
         try{
             adoptionFeedback.setFeedbackDate(new Date());
             adoptionFeedbackService.editAdoptionFeedback(feedbackId, adoptionFeedback);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/feedbackTemplates/editFeedback";
+            return "feedbackTemplates/editFeedback";
         }
         return "redirect:/adoption/" + adoptionFeedback.getAdoptionRequest().getAdoptionRequestId();
     }

@@ -55,14 +55,14 @@ public class PaymentController {
        paymentDto.setAdoptionRequest(adoptionRequest);
        paymentDto.setAmount(adoptionRequest.getPet().getPrice());
        model.addAttribute("paymentDto", paymentDto);
-       return "/paymentTemplates/addPaymentForm";
+       return "paymentTemplates/addPaymentForm";
     }
 
     @PostMapping
     public String payForAdoption(@ModelAttribute("paymentDto") @Valid  PaymentDto paymentDto,
                            BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
-            return "/paymentTemplates/addPaymentForm";
+            return "paymentTemplates/addPaymentForm";
         }
         try{
             Payment payment = new Payment();
@@ -72,7 +72,7 @@ public class PaymentController {
             paymentService.addPayment(payment);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/paymentTemplates/addPaymentForm";
+            return "paymentTemplates/addPaymentForm";
         }
         return "redirect:/adoption/adoptionListAsClient";
     }

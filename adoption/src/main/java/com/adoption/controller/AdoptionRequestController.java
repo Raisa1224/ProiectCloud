@@ -72,7 +72,7 @@ public class AdoptionRequestController {
     @RequestMapping("/addAdoptionForm/{petId}")
     public String addAdoptionForm(Model model, @PathVariable Integer petId) {
         RestTemplate restTemplate = new RestTemplate();
-        String petUrl = "http://localhost:8081/pet/getByIdPet/" + petId;
+        String petUrl = "http://pet:8081/pet/getByIdPet/" + petId;
         ResponseEntity<Pet> responsePet = restTemplate.exchange(
                 petUrl,
                 HttpMethod.GET,
@@ -82,7 +82,7 @@ public class AdoptionRequestController {
         AdoptionRequest adoptionRequest = new AdoptionRequest();
         adoptionRequest.setPet(responsePet.getBody());
         String id = redisService.getData("userId");
-        String loggedUserUrl = "http://localhost:8083/users/" + id;
+        String loggedUserUrl = "http://users:8083/users/" + id;
         ResponseEntity<User> responseLoggedUser = restTemplate.exchange(
                 loggedUserUrl,
                 HttpMethod.GET,
@@ -91,27 +91,27 @@ public class AdoptionRequestController {
                 });
         adoptionRequest.setClient(responseLoggedUser.getBody());
         model.addAttribute("adoptionRequest", adoptionRequest);
-        return "/adoptionRequestTemplates/addAdoptionForm";
+        return "adoptionRequestTemplates/addAdoptionForm";
     }
 
     @PostMapping
     public String adoptPet(@ModelAttribute("adoptionRequest") @Valid AdoptionRequest adoptionRequest,
                            BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
-            return "/adoptionRequestTemplates/addAdoptionForm";
+            return "adoptionRequestTemplates/addAdoptionForm";
         }
         try{
             adoptionRequestService.addAdoptionRequest(adoptionRequest);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/adoptionRequestTemplates/addAdoptionForm";
+            return "adoptionRequestTemplates/addAdoptionForm";
         }
         return "redirect:/payment/addPaymentForm/" + adoptionRequest.getAdoptionRequestId();
     }
 
     @GetMapping("/adoptionListAsClient")
     public ModelAndView getAllAdoptionRequestByClient(){
-        ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/getAllAdoptedPetsForClient");
+        ModelAndView modelAndView = new ModelAndView("adoptionRequestTemplates/getAllAdoptedPetsForClient");
         String id = redisService.getData("userId");
         List<AdoptionRequest> adoptionRequestList = adoptionRequestService.getAdoptionRequestByClient(Integer.valueOf(id));
         modelAndView.addObject("adoptionRequests",adoptionRequestList);
@@ -120,7 +120,7 @@ public class AdoptionRequestController {
 
     @GetMapping("/{adoptionId}")
     public ModelAndView getAdoptionDetails(@PathVariable Integer adoptionId){
-        ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/adoptionDetails");
+        ModelAndView modelAndView = new ModelAndView("adoptionRequestTemplates/adoptionDetails");
         AdoptionRequest adoptionRequest = adoptionRequestService.getAdoptionRequestById(adoptionId);
         List<AdoptionFeedback> adoptionFeedbacks = adoptionFeedbackService.getFeedbacksForAdoption(adoptionId);
         modelAndView.addObject("feedbacks",adoptionFeedbacks);
@@ -131,7 +131,7 @@ public class AdoptionRequestController {
 
     @GetMapping("/adoptionListAsOwner")
     public ModelAndView getAllAdoptionRequestByOwner(){
-        ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/getAllAdoptedPetsForOwner");
+        ModelAndView modelAndView = new ModelAndView("adoptionRequestTemplates/getAllAdoptedPetsForOwner");
         String id = redisService.getData("userId");
         List<AdoptionRequest> adoptionRequestList = adoptionRequestService.getAdoptionRequestByOwner(Integer.valueOf(id));
         modelAndView.addObject("adoptionRequests",adoptionRequestList);
@@ -140,7 +140,7 @@ public class AdoptionRequestController {
 
     @GetMapping("/getAdoptionForOwner/{adoptionId}")
     public ModelAndView getAdoptionForOwner(@PathVariable Integer adoptionId){
-        ModelAndView modelAndView = new ModelAndView("/adoptionRequestTemplates/adoptionDetailsOwner");
+        ModelAndView modelAndView = new ModelAndView("adoptionRequestTemplates/adoptionDetailsOwner");
         AdoptionRequest adoptionRequest = adoptionRequestService.getAdoptionRequestById(adoptionId);
         List<AdoptionFeedback> adoptionFeedbacks = adoptionFeedbackService.getFeedbacksForAdoption(adoptionId);
         modelAndView.addObject("feedbacks",adoptionFeedbacks);
