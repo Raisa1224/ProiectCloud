@@ -35,7 +35,7 @@
     </style>
 </head>
 <body>
-<div th:replace="~{/headerWithoutUser :: headerWithoutUser}"></div>
+<div th:replace="~{headerWithoutUser :: headerWithoutUser}"></div>
 <form enctype="multipart/form-data" method="post" th:action="@{'/registerUser'}" th:object="${user}">
     <div class="container" style="margin-top: 50px">
         <div class="panel panel-default">

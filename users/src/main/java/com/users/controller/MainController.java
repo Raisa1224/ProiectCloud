@@ -35,7 +35,7 @@ public class MainController {
         User user = new User();
         model.addAttribute("user", user);
 
-        return "/register";
+        return "register";
     }
 
     @PostMapping("/registerUser")
@@ -43,13 +43,13 @@ public class MainController {
                            BindingResult bindingResult, Model model){
         System.out.println(user);
         if (bindingResult.hasErrors()) {
-            return "/register";
+            return "register";
         }
         try{
             usersService.addUser(user);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/register";
+            return "register";
         }
         return "redirect:/login" ;
     }
