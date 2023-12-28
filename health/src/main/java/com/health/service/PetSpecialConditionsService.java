@@ -38,7 +38,7 @@ public class PetSpecialConditionsService {
 
     @Transactional
     public PetSpecialConditions addCondition(PetSpecialConditions petSpecialConditions){
-        Optional<PetSpecialConditions> existing = petSpecialConditionsRepository.findByName(petSpecialConditions.getName());
+        Optional<PetSpecialConditions> existing = petSpecialConditionsRepository.findByNameAndDescriptionAndObservations(petSpecialConditions.getName(), petSpecialConditions.getDescription(), petSpecialConditions.getObservations());
         if(existing.isPresent()){
             throw new EntityAlreadyExistsException("Condition was already added");
         }
@@ -49,7 +49,7 @@ public class PetSpecialConditionsService {
     public PetSpecialConditions editCondition(Integer conditionId, String name, String description, String observations){
         Optional<PetSpecialConditions> old = petSpecialConditionsRepository.findById(conditionId);
         if(old.isPresent()){
-            Optional<PetSpecialConditions> existing = petSpecialConditionsRepository.findByName(name);
+            Optional<PetSpecialConditions> existing = petSpecialConditionsRepository.findByNameAndDescriptionAndObservations(name, description, observations);
             if(existing.isPresent()){
                 throw new EntityAlreadyExistsException("Condition was already added");
             }
