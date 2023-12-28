@@ -38,7 +38,7 @@ public class PetMedicationsController {
         Integer loggedInUser = Integer.valueOf(idString);
 
         RestTemplate restTemplate = new RestTemplate();
-        String ownerIdURL = Constants.PETS_BASE_URL + Constants.GET_OWNER_FOR_PET_URL + petId;
+        String ownerIdURL = Constants.PETS_BASE_URL_CONTAINER + Constants.GET_OWNER_FOR_PET_URL + petId;
         Integer ownerId = restTemplate.getForObject(ownerIdURL, Integer.class);
 
         System.out.println("IDS" + loggedInUser + " " + ownerId);
@@ -51,7 +51,7 @@ public class PetMedicationsController {
         model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
         model.addAttribute("loggedInUser", logged);
 
-        return "/getAllPetMedicationsForPet";
+        return "getAllPetMedicationsForPet";
     }
 
     @GetMapping("/medication/{medicationId}")
@@ -67,20 +67,20 @@ public class PetMedicationsController {
         petMedications.setPet(pet);
         model.addAttribute("medication", petMedications);
 
-        return "/addPetMedication";
+        return "addPetMedication";
     }
 
     @PostMapping("")
     public String addPetMedication(@ModelAttribute("medication") @Valid PetMedications petMedication,
                                    BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
-            return "/addPetMedication";
+            return "addPetMedication";
         }
         try{
             petMedicationsService.addMedication(petMedication);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/addPetMedication";
+            return "addPetMedication";
         }
         return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petMedication.getPet().getPetId() ;
     }
@@ -97,7 +97,7 @@ public class PetMedicationsController {
 
         model.addAttribute("medication", petMedications);
 
-        return "/editPetMedication";
+        return "editPetMedication";
     }
 
 
@@ -111,13 +111,13 @@ public class PetMedicationsController {
         petMedication.setPet(old.getPet());
 
         if (bindingResult.hasErrors()) {
-            return "/editPetMedication";
+            return "editPetMedication";
         }
         try{
             petMedicationsService.editMedication(medicationId, petMedication.getDosage(), petMedication.getFrequencyDays(), petMedication.getName(), petMedication.getReason(), petMedication.getObservations());
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/editPetMedication";
+            return "editPetMedication";
         }
         return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petMedication.getPet().getPetId() ;
 

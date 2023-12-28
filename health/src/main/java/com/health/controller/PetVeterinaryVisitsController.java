@@ -49,7 +49,7 @@ public class PetVeterinaryVisitsController {
         Integer loggedInUser = Integer.valueOf(idString);
 
         RestTemplate restTemplate = new RestTemplate();
-        String ownerIdURL = Constants.PETS_BASE_URL + Constants.GET_OWNER_FOR_PET_URL + petId;
+        String ownerIdURL = Constants.PETS_BASE_URL_CONTAINER + Constants.GET_OWNER_FOR_PET_URL + petId;
         Integer ownerId = restTemplate.getForObject(ownerIdURL, Integer.class);
 
         System.out.println("IDS" + loggedInUser + " " + ownerId);
@@ -62,7 +62,7 @@ public class PetVeterinaryVisitsController {
         model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
         model.addAttribute("loggedInUser", logged);
 
-        return "/getAllPetVeterinaryVisitsForPet";
+        return "getAllPetVeterinaryVisitsForPet";
     }
     @RequestMapping("/add/{petId}")
     public String addVeterinaryVisit(Model model, @PathVariable Integer petId){
@@ -72,20 +72,20 @@ public class PetVeterinaryVisitsController {
         petVeterinaryVisits.setPet(pet);
         model.addAttribute("veterinaryvisit", petVeterinaryVisits);
 
-        return "/addPetVeterinaryVisit";
+        return "addPetVeterinaryVisit";
     }
 
     @PostMapping("")
     public String addPetVeterinaryVisit(@ModelAttribute("veterinaryvisit") @Valid PetVeterinaryVisits petVeterinaryVisits,
                                     BindingResult bindingResult, Model model){
         if (bindingResult.hasErrors()) {
-            return "/addPetVeterinaryVisit";
+            return "addPetVeterinaryVisit";
         }
         try{
             petVeterinaryVisitsService.addVisit(petVeterinaryVisits);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/addPetVeterinaryVisit";
+            return "addPetVeterinaryVisit";
         }
         return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVeterinaryVisits.getPet().getPetId() ;
     }
@@ -102,7 +102,7 @@ public class PetVeterinaryVisitsController {
 
         model.addAttribute("veterinaryvisit", petVeterinaryVisits);
 
-        return "/editPetVeterinaryVisit";
+        return "editPetVeterinaryVisit";
     }
 
 
@@ -116,13 +116,13 @@ public class PetVeterinaryVisitsController {
         petVeterinaryVisits.setPet(old.getPet());
 
         if (bindingResult.hasErrors()) {
-            return "/editPetVeterinaryVisit";
+            return "editPetVeterinaryVisit";
         }
         try{
             petVeterinaryVisitsService.editVisit(visitId, petVeterinaryVisits.getClinic(), petVeterinaryVisits.getDate(), petVeterinaryVisits.getCause(), petVeterinaryVisits.getResult());
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/editPetVeterinaryVisit";
+            return "editPetVeterinaryVisit";
         }
         return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVeterinaryVisits.getPet().getPetId() ;
 

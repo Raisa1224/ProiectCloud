@@ -49,7 +49,7 @@ public class PetSpecialConditionsController {
         Integer loggedInUser = Integer.valueOf(idString);
 
         RestTemplate restTemplate = new RestTemplate();
-        String ownerIdURL = Constants.PETS_BASE_URL + Constants.GET_OWNER_FOR_PET_URL + petId;
+        String ownerIdURL = Constants.PETS_BASE_URL_CONTAINER + Constants.GET_OWNER_FOR_PET_URL + petId;
         Integer ownerId = restTemplate.getForObject(ownerIdURL, Integer.class);
 
         System.out.println("IDS" + loggedInUser + " " + ownerId);
@@ -62,7 +62,7 @@ public class PetSpecialConditionsController {
         model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
         model.addAttribute("loggedInUser", logged);
 
-        return "/getAllPetSpecialConditionsForPet";
+        return "getAllPetSpecialConditionsForPet";
     }
 
     @RequestMapping("/add/{petId}")
@@ -73,7 +73,7 @@ public class PetSpecialConditionsController {
         petSpecialConditions.setPet(pet);
         model.addAttribute("condition", petSpecialConditions);
 
-        return "/addPetSpecialCondition";
+        return "addPetSpecialCondition";
     }
 
     @PostMapping("")
@@ -81,13 +81,13 @@ public class PetSpecialConditionsController {
                                    BindingResult bindingResult, Model model){
         System.out.println(petSpecialConditions);
         if (bindingResult.hasErrors()) {
-            return "/addPetSpecialCondition";
+            return "addPetSpecialCondition";
         }
         try{
             petSpecialConditionsService.addCondition(petSpecialConditions);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/addPetSpecialCondition";
+            return "addPetSpecialCondition";
         }
         return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petSpecialConditions.getPet().getPetId() ;
     }
@@ -104,7 +104,7 @@ public class PetSpecialConditionsController {
 
         model.addAttribute("condition", petSpecialConditions);
 
-        return "/editPetSpecialCondition";
+        return "editPetSpecialCondition";
     }
 
 
@@ -118,13 +118,13 @@ public class PetSpecialConditionsController {
         petSpecialConditions.setPet(old.getPet());
 
         if (bindingResult.hasErrors()) {
-            return "/editPetSpecialCondition";
+            return "editPetSpecialCondition";
         }
         try{
             petSpecialConditionsService.editCondition(conditionId, petSpecialConditions.getName(), petSpecialConditions.getDescription(), petSpecialConditions.getObservations());
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/editPetSpecialCondition";
+            return "editPetSpecialCondition";
         }
         return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petSpecialConditions.getPet().getPetId() ;
 

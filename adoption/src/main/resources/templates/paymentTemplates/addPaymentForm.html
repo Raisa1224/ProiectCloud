@@ -88,7 +88,7 @@
   </style>
 </head>
 <body>
-<div th:replace="~{/header :: header}"></div>
+<div th:replace="~{header :: header}"></div>
 <form enctype="multipart/form-data" method="post" th:action="@{/payment}" th:object="${paymentDto}">
 
   <div class="container" style="margin-top: 50px">

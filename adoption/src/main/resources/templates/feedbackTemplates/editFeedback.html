@@ -70,7 +70,7 @@
   </style>
 </head>
 <body>
-<div th:replace="~{/header :: header}"></div>
+<div th:replace="~{header :: header}"></div>
 <form th:action="@{'/feedback/editFeedback/' + ${feedback.feedbackId}}" method="post" th:object="${feedback}">
 
   <div class="container">

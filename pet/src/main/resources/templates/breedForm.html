@@ -98,7 +98,7 @@
 </head>
 
 <body>
-<div th:replace="~{/header :: header}"></div>
+<div th:replace="~{header :: header}"></div>
 <form class="form-container" enctype="multipart/form-data" method="post" th:action="@{/breed/addBreed}" th:object="${breedAdd}">
     <div class="container" style="margin-top: 30px">
         <div class="panel panel-default">

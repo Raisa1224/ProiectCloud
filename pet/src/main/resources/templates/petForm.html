@@ -120,7 +120,7 @@
 </head>
 
 <body>
-<div th:replace="~{/header :: header}"></div>
+<div th:replace="~{header :: header}"></div>
 <form class="form-container" enctype="multipart/form-data" method="post" th:action="@{/pet/addPet}" th:object="${petAdd}">
     <div class="container" style="margin-top: 30px">
         <div class="panel panel-default">

@@ -25,6 +25,7 @@ services:
       - .m2:/root/.m2
   users:
     image: user-service:latest
+    container_name: users
     restart: always
     ports:
       - "8083:8083"
@@ -35,6 +36,54 @@ services:
       - spring.data.redis.host=redis
     depends_on:
       - mysqldb 
-      - redis      
+      - redis   
+      
+
+  pet:
+    image: pet-service:latest
+    container_name: pet
+    restart: always
+    ports:
+      - "8081:8081"
+    networks:
+      - cloudnet
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/cloudproject?allowPublicKeyRetrieval=true   
+      - spring.data.redis.host=redis
+    depends_on:
+      - mysqldb 
+      - redis 
+      - users
+      - health   
+
+  health:
+    image: health-service:latest
+    container_name: health
+    restart: always
+    ports:
+      - "8080:8080"
+    networks:
+      - cloudnet
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/cloudproject?allowPublicKeyRetrieval=true   
+      - spring.data.redis.host=redis
+    depends_on:
+      - mysqldb 
+      - redis   
+
+  adoption:
+    image: adoption-service:latest
+    container_name: adoption
+    restart: always
+    ports:
+      - "8082:8082"
+    networks:
+      - cloudnet
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/cloudproject?allowPublicKeyRetrieval=true   
+      - spring.data.redis.host=redis
+    depends_on:
+      - mysqldb 
+      - redis     
 networks:
   cloudnet:

@@ -56,7 +56,7 @@ public class PetController {
         Page<Pet> petPage = petService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         String id = redisService.getData("userId");
         RestTemplate restTemplate = new RestTemplate();
-        String userUrlLogged = "http://localhost:8083/users/" + id;
+        String userUrlLogged = "http://users:8083/users/" + id;
         ResponseEntity<User> loggedUser = restTemplate.exchange(
                 userUrlLogged,
                 HttpMethod.GET,
@@ -78,7 +78,7 @@ public class PetController {
     @GetMapping("/getPetById/{petId}")
     public String getPetById(@PathVariable Integer petId, Model model){
         RestTemplate restTemplate = new RestTemplate();
-        String medicationUrl = "http://localhost:8080/medications/" + petId;
+        String medicationUrl = "http://health:8080/medications/" + petId;
         ResponseEntity<String> tableMedication = restTemplate.exchange(
                 medicationUrl,
                 HttpMethod.GET,
@@ -88,7 +88,7 @@ public class PetController {
         );
         model.addAttribute("medicationTable",tableMedication.getBody());
 
-        String specialConditionsUrl = "http://localhost:8080/conditions/" + petId;
+        String specialConditionsUrl = "http://health:8080/conditions/" + petId;
         ResponseEntity<String> tableSpecialConditions = restTemplate.exchange(
                 specialConditionsUrl,
                 HttpMethod.GET,
@@ -98,7 +98,7 @@ public class PetController {
         );
         model.addAttribute("specialConditionsTable",tableSpecialConditions.getBody());
 
-        String vaccinationUrl = "http://localhost:8080/vaccinations/" + petId;
+        String vaccinationUrl = "http://health:8080/vaccinations/" + petId;
         ResponseEntity<String> tableVaccination = restTemplate.exchange(
                 vaccinationUrl,
                 HttpMethod.GET,
@@ -108,7 +108,7 @@ public class PetController {
         );
         model.addAttribute("vaccinationTable",tableVaccination.getBody());
 
-        String veterinaryVisitsUrl = "http://localhost:8080/veterinaryvisits/" + petId;
+        String veterinaryVisitsUrl = "http://health:8080/veterinaryvisits/" + petId;
         ResponseEntity<String> tableVeterinaryVisits = restTemplate.exchange(
                 veterinaryVisitsUrl,
                 HttpMethod.GET,
@@ -135,7 +135,7 @@ public class PetController {
         model.addAttribute("breed", breedService.getAllBreeds());
         String id = redisService.getData("userId");
         RestTemplate restTemplate = new RestTemplate();
-        String userUrlLogged = "http://localhost:8083/users/" + id;
+        String userUrlLogged = "http://users:8083/users/" + id;
         ResponseEntity<User> loggedUser = restTemplate.exchange(
                 userUrlLogged,
                 HttpMethod.GET,
@@ -147,7 +147,7 @@ public class PetController {
         pet.setOwner(loggedUser.getBody());
         model.addAttribute("pet",pet);
 
-        return "/petForm";
+        return "petForm";
     }
 
     @PostMapping("/addPet")
@@ -160,7 +160,7 @@ public class PetController {
         //user for add
         RestTemplate restTemplate = new RestTemplate();
         String id = redisService.getData("userId");
-        String userUrlLogged = "http://localhost:8083/users/" + id;
+        String userUrlLogged = "http://users:8083/users/" + id;
         ResponseEntity<User> loggedUser = restTemplate.exchange(
                 userUrlLogged,
                 HttpMethod.GET,
@@ -173,7 +173,7 @@ public class PetController {
         model.addAttribute("pet",pet);
 
         if (result.hasErrors()) {
-            return "/petForm";
+            return "petForm";
         } else {
             petService.addPet(pet);
             return "redirect:/pet/getAllPets";

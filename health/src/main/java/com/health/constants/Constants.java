@@ -9,5 +9,7 @@ public class Constants {
 
     public static String PETS_BASE_URL = "http://localhost:8081";
 
+    public static String PETS_BASE_URL_CONTAINER = "http://pet:8081";
+
     public static String HEALTH_BASE_URL = "http://localhost:8080";
 }

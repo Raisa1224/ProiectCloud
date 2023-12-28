@@ -53,7 +53,7 @@ public class PetVaccinationsController {
         Integer loggedInUser = Integer.valueOf(idString);
 
         RestTemplate restTemplate = new RestTemplate();
-        String ownerIdURL = Constants.PETS_BASE_URL + Constants.GET_OWNER_FOR_PET_URL + petId;
+        String ownerIdURL = Constants.PETS_BASE_URL_CONTAINER + Constants.GET_OWNER_FOR_PET_URL + petId;
         Integer ownerId = restTemplate.getForObject(ownerIdURL, Integer.class);
 
         System.out.println("IDS" + loggedInUser + " " + ownerId);
@@ -66,7 +66,7 @@ public class PetVaccinationsController {
         model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
         model.addAttribute("loggedInUser", logged);
 
-        return "/getAllPetVaccinationsForPet";
+        return "getAllPetVaccinationsForPet";
     }
     @RequestMapping("/add/{petId}")
     public String addVaccination(Model model, @PathVariable Integer petId){
@@ -76,7 +76,7 @@ public class PetVaccinationsController {
         petVaccinations.setPet(pet);
         model.addAttribute("vaccination", petVaccinations);
 
-        return "/addPetVaccination";
+        return "addPetVaccination";
     }
 
     @PostMapping("")
@@ -84,13 +84,13 @@ public class PetVaccinationsController {
                                       BindingResult bindingResult, Model model){
         System.out.println(petVaccinations);
         if (bindingResult.hasErrors()) {
-            return "/addPetVaccination";
+            return "addPetVaccination";
         }
         try{
             petVaccinationsService.addVaccination(petVaccinations);
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/addPetVaccination";
+            return "addPetVaccination";
         }
         return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVaccinations.getPet().getPetId() ;
     }
@@ -107,7 +107,7 @@ public class PetVaccinationsController {
 
         model.addAttribute("vaccination", petVaccinations);
 
-        return "/editPetVaccination";
+        return "editPetVaccination";
     }
 
 
@@ -121,13 +121,13 @@ public class PetVaccinationsController {
         petVaccinations.setPet(old.getPet());
 
         if (bindingResult.hasErrors()) {
-            return "/editPetVaccination";
+            return "editPetVaccination";
         }
         try{
             petVaccinationsService.editVaccination(vaccinationId, petVaccinations.getName(), petVaccinations.getDate(), petVaccinations.getDose(), petVaccinations.getTotalDoses());
         }catch (Exception exception){
             bindingResult.reject("globalError", exception.getMessage());
-            return "/editPetVaccination";
+            return "editPetVaccination";
         }
         return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVaccinations.getPet().getPetId() ;
 

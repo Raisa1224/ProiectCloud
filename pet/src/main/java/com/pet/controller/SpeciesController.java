@@ -39,7 +39,7 @@ public class SpeciesController {
     @RequestMapping("/add")
     public String addSpeciesForm(Model model) {
         model.addAttribute("speciesAdd", new Species());
-        return "/speciesForm";
+        return "speciesForm";
     }
 
     @PostMapping("/addSpecies")
@@ -47,7 +47,7 @@ public class SpeciesController {
                            BindingResult result,
                            Model model) {
         if (result.hasErrors()) {
-            return "/speciesForm";
+            return "speciesForm";
         } else {
             speciesService.addSpecies(species);
             return "redirect:/species/getAllSpecies";

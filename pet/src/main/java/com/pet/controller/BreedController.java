@@ -39,7 +39,7 @@ public class BreedController {
     @RequestMapping("/add")
     public String addBreedForm(Model model) {
         model.addAttribute("breedAdd", new Breed());
-        return "/breedForm";
+        return "breedForm";
     }
 
     @PostMapping("/addBreed")
@@ -47,7 +47,7 @@ public class BreedController {
                              BindingResult result,
                              Model model) {
         if (result.hasErrors()) {
-            return "/breedForm";
+            return "breedForm";
         } else {
             breedService.addBreed(breed);
             return "redirect:/breed/getAllBreeds";
