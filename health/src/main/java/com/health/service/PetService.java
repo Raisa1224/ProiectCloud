@@ -20,7 +20,15 @@ public class PetService {
     PetRepository petRepository;
 
     public Pet save(Pet pet){
+        Optional<Pet> old = getById(pet.getPetId());
+        if(old.isPresent()){
+            return pet;
+        }
         petRepository.save(pet);
         return pet;
+    }
+
+    public Optional<Pet> getById(Integer id){
+        return petRepository.findById(id);
     }
 }
