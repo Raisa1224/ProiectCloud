@@ -19,20 +19,59 @@ services:
     restart: always
     networks:
       - cloudnet
-  mysqldb:
-    image: mysqldb
-    container_name: mysqldb
+
+  mysqldb_user:
+    image: mysqldb_user
+    container_name: mysqldb_user
     restart: always
     environment:
       MYSQL_DATABASE: cloudproject
       MYSQL_PASSWORD: admin
       MYSQL_ROOT_PASSWORD: admin
-    ports:
-      - "3306:3306"
     networks:
       - cloudnet
     volumes:
-      - .m2:/root/.m2
+      - .m2_user:/root/.m2
+
+  mysqldb_pet:
+    image: mysqldb_pet
+    container_name: mysqldb_pet
+    restart: always
+    environment:
+      MYSQL_DATABASE: petproject
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+    networks:
+      - cloudnet
+    volumes:
+      - .m2_pet:/root/.m2
+
+  mysqldb_adoption:
+    image: mysqldb_adoption
+    container_name: mysqldb_adoption
+    restart: always
+    environment:
+      MYSQL_DATABASE: adoptionproject
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+    networks:
+      - cloudnet
+    volumes:
+      - .m2_adoption:/root/.m2
+
+  mysqldb_health:
+    image: mysqldb_health
+    container_name: mysqldb_health
+    restart: always
+    environment:
+      MYSQL_DATABASE: healthproject
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: admin
+    networks:
+      - cloudnet
+    volumes:
+      - .m2_health:/root/.m2
+
   users:
     image: user-service:latest
     container_name: users
@@ -42,10 +81,10 @@ services:
     networks:
       - cloudnet
     environment:
-      - spring.datasource.url=jdbc:mysql://mysqldb:3306/cloudproject?allowPublicKeyRetrieval=true   
+      - spring.datasource.url=jdbc:mysql://mysqldb_user:3306/cloudproject?allowPublicKeyRetrieval=true
       - spring.data.redis.host=redis
     depends_on:
-      - mysqldb 
+      - mysqldb_user
       - redis   
       
 
@@ -58,10 +97,10 @@ services:
     networks:
       - cloudnet
     environment:
-      - spring.datasource.url=jdbc:mysql://mysqldb:3306/cloudproject?allowPublicKeyRetrieval=true   
+      - spring.datasource.url=jdbc:mysql://mysqldb_pet:3306/petproject?allowPublicKeyRetrieval=true
       - spring.data.redis.host=redis
     depends_on:
-      - mysqldb 
+      - mysqldb_pet
       - redis 
       - users
       - health   
@@ -75,10 +114,10 @@ services:
     networks:
       - cloudnet
     environment:
-      - spring.datasource.url=jdbc:mysql://mysqldb:3306/cloudproject?allowPublicKeyRetrieval=true   
+      - spring.datasource.url=jdbc:mysql://mysqldb_health:3306/healthproject?allowPublicKeyRetrieval=true
       - spring.data.redis.host=redis
     depends_on:
-      - mysqldb 
+      - mysqldb_health
       - redis   
 
   adoption:
@@ -90,10 +129,10 @@ services:
     networks:
       - cloudnet
     environment:
-      - spring.datasource.url=jdbc:mysql://mysqldb:3306/cloudproject?allowPublicKeyRetrieval=true   
+      - spring.datasource.url=jdbc:mysql://mysqldb_adoption:3306/adoptionproject?allowPublicKeyRetrieval=true
       - spring.data.redis.host=redis
     depends_on:
-      - mysqldb 
+      - mysqldb_adoption
       - redis     
 networks:
   cloudnet:
