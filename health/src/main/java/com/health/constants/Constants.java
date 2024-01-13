@@ -5,7 +5,7 @@ public class Constants {
 
     public static String GET_OWNER_FOR_PET_URL = "/pet/getOwnerIdForPet/";
 
-    public static String GET_ALL_PETS_URL = "/pet/getAllPets";
+    public static String GET_ALL_PETS_URL = "/pet/getAll";
 
     public static String PETS_BASE_URL = "http://localhost:8081";
 

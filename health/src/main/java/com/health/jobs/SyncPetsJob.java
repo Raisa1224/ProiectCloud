@@ -1,7 +1,8 @@
-package com.pet.jobs;
+package com.health.jobs;
 
-import com.pet.entity.User;
-import com.pet.service.UserService;
+import com.health.service.PetService;
+import com.health.constants.Constants;
+import com.health.entity.Pet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -13,25 +14,27 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 @Component
-public class SyncUsersJob {
+public class SyncPetsJob {
+
     @Autowired
-    UserService userService;
+    PetService petService;
+
     @Scheduled(fixedRate = 60000) // 60000 milliseconds = 1 minute
     public void executeEveryMinute() {
-        System.out.println("Sync for users started...");
+        System.out.println("Sync for pets started...");
         //Get all pets
         RestTemplate restTemplate = new RestTemplate();
-        String getAllUsersURL = "http://users:8083/users";
-        ResponseEntity<List<User>> responseEntity = restTemplate.exchange(
-                getAllUsersURL,
+        String getAllPetsURL = Constants.PETS_BASE_URL_CONTAINER + Constants.GET_ALL_PETS_URL;
+        ResponseEntity<List<Pet>> responseEntity = restTemplate.exchange(
+                getAllPetsURL,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<User>>() {});
+                new ParameterizedTypeReference<List<Pet>>() {});
 
-        List<User> users = responseEntity.getBody();
-        for(User user : users){
-            userService.addUsers(user);
+        List<Pet> pets = responseEntity.getBody();
+        for(Pet pet : pets){
+            petService.save(pet);
         }
-        System.out.println("Sync for users ended...");
+        System.out.println("Sync for pets ended...");
     }
 }

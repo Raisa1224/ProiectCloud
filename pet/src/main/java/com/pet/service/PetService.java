@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,6 +20,10 @@ public class PetService implements PetServiceImpl{
 
     @Autowired
     private PetRepository petRepository;
+
+    public List<Pet> getAllPets(){
+        return petRepository.findAll();
+    }
 
     public Pet getPetById(Integer petId){
         Optional<Pet> petOptional= petRepository.findById(petId);

@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -43,6 +44,11 @@ public class PetController {
     public ResponseEntity<Integer> getOwnerIdForPet(@PathVariable Integer petId){
         Pet pet = petService.getPetById(petId);
         return ResponseEntity.ok(pet.getOwner().getUserId());
+    }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Pet>> getAllPetsForSync(){
+        return ResponseEntity.ok(petService.getAllPets());
     }
     @RequestMapping("/getAllPets")
     public String getAllPets(Model model,
