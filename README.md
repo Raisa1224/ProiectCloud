@@ -14,9 +14,19 @@ Write 1 and press enter
 Example: \
 `cd "/mnt/c/PERSONAL/MASTER/ANUL2/CLOUD/ProiectLaborator/ProiectCloud/docker-config"`
 
-**STEP 3**: Build image for MySQL
+**STEP 3**: Build images for MySQL for the databases for all the projects
 
-`docker build -t mysqldb:latest -f Dockerfile .`
+`cd userDocker` \
+`docker build -t mysqldb_user:latest -f Dockerfile .`
+
+`cd petDocker` \
+`docker build -t mysqldb_pet:latest -f Dockerfile .`
+
+`cd healthDocker` \
+`docker build -t mysqldb_health:latest -f Dockerfile .`
+
+`cd adoptionDocker` \
+`docker build -t mysqldb_adoption:latest -f Dockerfile .`
 
 **STEP 4**: Go to pet microservice in the root folder of the project and build the Pet image
 
@@ -40,3 +50,5 @@ Example: \
 `docker compose -f docker-compose.yml up`
 
 _Note_: CTRL + Z or CTRL + C stops the current process
+
+To open Zipkin go to `http://localhost:9411/`

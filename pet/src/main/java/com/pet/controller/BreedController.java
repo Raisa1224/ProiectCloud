@@ -7,11 +7,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequestMapping("/breed")
@@ -44,8 +46,8 @@ public class BreedController {
 
     @PostMapping("/addBreed")
     public String addBreed(@ModelAttribute("breedAdd") @Valid Breed breed,
-                             BindingResult result,
-                             Model model) {
+                           BindingResult result,
+                           Model model) {
         if (result.hasErrors()) {
             return "breedForm";
         } else {
@@ -55,7 +57,7 @@ public class BreedController {
     }
 
     @RequestMapping("/deleteBreed/{breedId}")
-    public String deleteBreed(@PathVariable Integer breedId){
+    public String deleteBreed(@PathVariable Integer breedId) {
         breedService.deleteBreed(breedId);
         return "redirect:/breed/getAllBreeds";
     }
@@ -69,7 +71,7 @@ public class BreedController {
 
     @PostMapping("/editBreed/{breedId}")
     public String updateBreed(@PathVariable("breedId") Integer breedId,
-                              @ModelAttribute ("breed") @Valid Breed breed,
+                              @ModelAttribute("breed") @Valid Breed breed,
                               BindingResult result,
                               Model model) {
 
@@ -80,14 +82,19 @@ public class BreedController {
             return "breedUpdate";
         }
 
-        try{
+        try {
             Breed updatedBreed = breedService.editBreed(breedId, breed);
             model.addAttribute("breed", updatedBreed);
-        }catch (Exception exception){
+        } catch (Exception exception) {
             result.reject("globalError", exception.getMessage());
             return "breedUpdate";
         }
         return "redirect:/breed/getAllBreeds";
 
+    }
+
+    @GetMapping("/getAllBreedForSync")
+    public ResponseEntity<List<Breed>> getAllBreedForSync() {
+        return ResponseEntity.ok(breedService.getAllBreeds());
     }
 }
