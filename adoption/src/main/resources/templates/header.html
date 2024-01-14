@@ -9,32 +9,32 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav ml-auto topnav">
                     <li class="nav-item">
-                        <a class="nav-link btn" href="http://localhost:8081/pet/getAllPets">
+                        <a class="nav-link btn" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8081/pet/getAllPets'}">
                             <i class="fas fa-paw"></i> Pets
                         </a>
                     </li>&nbsp;
                     <li class="nav-item">
-                        <a class="nav-link btn" href="http://localhost:8081/species/getAllSpecies">
+                        <a class="nav-link btn" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8081/species/getAllSpecies'}">
                             <i class="fas fa-leaf"></i> Species
                         </a>
                     </li>&nbsp;
                     <li class="nav-item">
-                        <a class="nav-link btn" href="http://localhost:8081/breed/getAllBreeds">
+                        <a class="nav-link btn" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8081/breed/getAllBreeds'}">
                             <i class="fas fa-dog"></i> Breeds
                         </a>
                     </li>&nbsp;
                     <li class="nav-item">
-                        <a class="nav-link btn" href="http://localhost:8082/adoption/adoptionListAsClient">
+                        <a class="nav-link btn" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8082/adoption/adoptionListAsClient'}">
                             <i class="fas fa-users"></i> Adoptions as Client
                         </a>
                     </li>&nbsp;
                     <li class="nav-item">
-                        <a class="nav-link btn" href="http://localhost:8082/adoption/adoptionListAsOwner">
+                        <a class="nav-link btn" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8082/adoption/adoptionListAsOwner'}">
                             <i class="fas fa-user"></i> Adoptions as Owner
                         </a>
                     </li>&nbsp;
                     <li class="nav-item">
-                        <a class="nav-link btn" href="http://localhost:8083/logout">
+                        <a class="nav-link btn" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8083/logout'}">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </li>&nbsp;

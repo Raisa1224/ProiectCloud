@@ -1,6 +1,7 @@
 package com.users.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,6 +19,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class SecurityJPAConfig {
 
+    @Value("${docker.application.ip}")
+    private String ip;
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -33,7 +36,7 @@ public class SecurityJPAConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register").permitAll()
                                 .requestMatchers("/users").permitAll()
-                                .requestMatchers("http://localhost:8081/pet/getAllPets/").permitAll()
+                                .requestMatchers("http://"+ip+":8081/pet/getAllPets/").permitAll()
                                 .requestMatchers("/users/getLoggedUserId").permitAll()
                                 .requestMatchers("/users/{userId}").permitAll()
                                 .requestMatchers("/registerUser").permitAll()
@@ -42,7 +45,7 @@ public class SecurityJPAConfig {
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("http://localhost:8081/pet/getAllPets")
+                                .defaultSuccessUrl("http://"+ip+":8081/pet/getAllPets")
                                 .permitAll()
                 ).logout(
                         logout -> logout

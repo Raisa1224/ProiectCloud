@@ -21,7 +21,7 @@ services:
       - cloudnet
 
   mysqldb_user:
-    image: mysqldb_user
+    image: atasieoana2001/cloud_project:mysqldb_user-latest
     container_name: mysqldb_user
     restart: always
     environment:
@@ -34,7 +34,7 @@ services:
       - .m2_user:/root/.m2
 
   mysqldb_pet:
-    image: mysqldb_pet
+    image: atasieoana2001/cloud_project:mysqldb_pet-latest
     container_name: mysqldb_pet
     restart: always
     environment:
@@ -47,7 +47,7 @@ services:
       - .m2_pet:/root/.m2
 
   mysqldb_adoption:
-    image: mysqldb_adoption
+    image: atasieoana2001/cloud_project:mysqldb_adoption-latest
     container_name: mysqldb_adoption
     restart: always
     environment:
@@ -60,7 +60,7 @@ services:
       - .m2_adoption:/root/.m2
 
   mysqldb_health:
-    image: mysqldb_health
+    image: atasieoana2001/cloud_project:mysqldb_health-latest
     container_name: mysqldb_health
     restart: always
     environment:
@@ -73,7 +73,7 @@ services:
       - .m2_health:/root/.m2
 
   users:
-    image: user-service:latest
+    image: atasieoana2001/cloud_project:user-service-latest
     container_name: users
     restart: always
     ports:
@@ -83,13 +83,14 @@ services:
     environment:
       - spring.datasource.url=jdbc:mysql://mysqldb_user:3306/cloudproject?allowPublicKeyRetrieval=true
       - spring.data.redis.host=redis
+      - docker.application.ip=192.168.199.84
     depends_on:
       - mysqldb_user
       - redis   
       
 
   pet:
-    image: pet-service:latest
+    image: atasieoana2001/cloud_project:pet-service-latest
     container_name: pet
     restart: always
     ports:
@@ -99,6 +100,7 @@ services:
     environment:
       - spring.datasource.url=jdbc:mysql://mysqldb_pet:3306/petproject?allowPublicKeyRetrieval=true
       - spring.data.redis.host=redis
+      - docker.application.ip=192.168.199.84
     depends_on:
       - mysqldb_pet
       - redis 
@@ -106,7 +108,7 @@ services:
       - health   
 
   health:
-    image: health-service:latest
+    image: atasieoana2001/cloud_project:health-service-latest
     container_name: health
     restart: always
     ports:
@@ -116,12 +118,13 @@ services:
     environment:
       - spring.datasource.url=jdbc:mysql://mysqldb_health:3306/healthproject?allowPublicKeyRetrieval=true
       - spring.data.redis.host=redis
+      - docker.application.ip=192.168.199.84
     depends_on:
       - mysqldb_health
       - redis   
 
   adoption:
-    image: adoption-service:latest
+    image: atasieoana2001/cloud_project:adoption-service-latest
     container_name: adoption
     restart: always
     ports:
@@ -131,8 +134,10 @@ services:
     environment:
       - spring.datasource.url=jdbc:mysql://mysqldb_adoption:3306/adoptionproject?allowPublicKeyRetrieval=true
       - spring.data.redis.host=redis
+      - docker.application.ip=192.168.199.84
     depends_on:
       - mysqldb_adoption
       - redis     
+      
 networks:
   cloudnet:
