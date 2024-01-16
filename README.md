@@ -1,4 +1,6 @@
 # **Cloud Project**
+
+The documentation for the project can be found [here](/ProiectLaboratorDocumentatieCloud.pdf)
  
 To open Zipkin go to `http://<IP_ADDRESS>:9411/`
  
