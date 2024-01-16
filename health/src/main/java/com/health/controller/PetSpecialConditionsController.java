@@ -7,6 +7,7 @@ import com.health.service.PetSpecialConditionsService;
 import com.health.service.RedisService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,8 @@ public class PetSpecialConditionsController {
 
     @Autowired
     RedisService redisService;
-
+    @Value("${docker.application.ip}")
+    public  String ip;
     @GetMapping("BE/{petId}")
     public ResponseEntity<List<PetSpecialConditions>> getAllSpecialConditionsForPet(@PathVariable Integer petId){
         List<PetSpecialConditions> petSpecialConditions = petSpecialConditionsService.getAllSpecialConditionsForPet(petId);
@@ -58,8 +60,9 @@ public class PetSpecialConditionsController {
             logged = false;
         }
 
+        String health_url = Constants.HEALTH_BASE_URL_part_1 + ip + Constants.HEALTH_BASE_URL_PART_2;
         model.addAttribute("conditions", petSpecialConditions);
-        model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
+        model.addAttribute("HEALTH", health_url);
         model.addAttribute("loggedInUser", logged);
 
         return "getAllPetSpecialConditionsForPet";
@@ -89,7 +92,7 @@ public class PetSpecialConditionsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "addPetSpecialCondition";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petSpecialConditions.getPet().getPetId() ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petSpecialConditions.getPet().getPetId() ;
     }
 
     @PatchMapping("/editBE/{conditionId}")
@@ -126,13 +129,13 @@ public class PetSpecialConditionsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "editPetSpecialCondition";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petSpecialConditions.getPet().getPetId() ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petSpecialConditions.getPet().getPetId() ;
 
     }
 
     @RequestMapping("/delete/{conditionId}")
     public String deleteCondition(@PathVariable Integer conditionId){
         Integer petId = petSpecialConditionsService.deleteCondition(conditionId);
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petId ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petId ;
     }
 }

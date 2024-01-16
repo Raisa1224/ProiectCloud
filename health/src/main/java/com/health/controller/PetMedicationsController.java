@@ -7,6 +7,7 @@ import com.health.service.PetMedicationsService;
 import com.health.service.RedisService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,9 @@ public class PetMedicationsController {
 
     @Autowired
     RedisService redisService;
+
+    @Value("${docker.application.ip}")
+    public  String ip;
 
     @GetMapping
     public ResponseEntity<List<PetMedications>> getAllMedications(){
@@ -47,8 +51,9 @@ public class PetMedicationsController {
             logged = false;
         }
 
+        String health_url = Constants.HEALTH_BASE_URL_part_1 + ip + Constants.HEALTH_BASE_URL_PART_2;
         model.addAttribute("medications", petMedications);
-        model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
+        model.addAttribute("HEALTH", health_url);
         model.addAttribute("loggedInUser", logged);
 
         return "getAllPetMedicationsForPet";
@@ -82,7 +87,7 @@ public class PetMedicationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "addPetMedication";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petMedication.getPet().getPetId() ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petMedication.getPet().getPetId() ;
     }
 
     @PatchMapping("/editMedicationBE/{medicationId}")
@@ -119,7 +124,7 @@ public class PetMedicationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "editPetMedication";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petMedication.getPet().getPetId() ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petMedication.getPet().getPetId() ;
 
     }
 
@@ -127,6 +132,6 @@ public class PetMedicationsController {
     @RequestMapping("/delete/{medicationId}")
     public String deleteMedication(@PathVariable Integer medicationId){
         Integer petId = petMedicationsService.deleteMedication(medicationId);
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petId ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petId ;
     }
 }

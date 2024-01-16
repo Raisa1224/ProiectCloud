@@ -7,6 +7,7 @@ import com.health.service.PetVaccinationsService;
 import com.health.service.RedisService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,8 @@ public class PetVaccinationsController {
 
     @Autowired
     RedisService redisService;
-
+    @Value("${docker.application.ip}")
+    public  String ip;
     @GetMapping
     public ResponseEntity<List<PetVaccinations>> getAllVaccinations(){
         return ResponseEntity.ok(petVaccinationsService.getAll());
@@ -61,9 +63,9 @@ public class PetVaccinationsController {
         if(ownerId!=loggedInUser){
             logged = false;
         }
-
+        String health_url = Constants.HEALTH_BASE_URL_part_1 + ip + Constants.HEALTH_BASE_URL_PART_2;
         model.addAttribute("vaccinations", petVaccinations);
-        model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
+        model.addAttribute("HEALTH", health_url);
         model.addAttribute("loggedInUser", logged);
 
         return "getAllPetVaccinationsForPet";
@@ -92,7 +94,7 @@ public class PetVaccinationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "addPetVaccination";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVaccinations.getPet().getPetId() ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petVaccinations.getPet().getPetId() ;
     }
 
     @PatchMapping("/editBE/{vaccinationId}")
@@ -129,13 +131,13 @@ public class PetVaccinationsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "editPetVaccination";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVaccinations.getPet().getPetId() ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petVaccinations.getPet().getPetId() ;
 
     }
 
     @RequestMapping("/delete/{vaccinationId}")
     public String deleteVaccination(@PathVariable Integer vaccinationId){
         Integer petId = petVaccinationsService.deleteVaccination(vaccinationId);
-        return "redirect:"+ Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petId ;
+        return "redirect:"+ Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petId ;
     }
 }

@@ -123,11 +123,11 @@
                         <h6 class="panel-subtitle" th:text="${'Owner: ' + getPet.owner.firstname + ' ' + getPet.owner.lastname}"></h6>
                     </div>
                     <div class="subnav">
-                        <a class="btn btn-subnav" th:href="${'http://'+ @environment.getProperty('docker.application.ip')+':8082/adoption/addAdoptionForm/' + ${getPet.petId}}">Adopt</a>
-                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="${'http://'+@environment.getProperty('docker.application.ip')+':8080/medications/add/' + ${getPet.petId}}">Add a medication</a>
-                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="${'http://'+@environment.getProperty('docker.application.ip')+':8080/conditions/add/' + ${getPet.petId}}">Add a condition</a>
-                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="${'http://'+@environment.getProperty('docker.application.ip')+':8080/vaccinations/add/' + ${getPet.petId}}">Add a vaccination</a>
-                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="${'http://'+@environment.getProperty('docker.application.ip')+':8080/veterinaryvisits/add/' + ${getPet.petId}}">Add a veterinary visit</a>
+                        <a class="btn btn-subnav" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8082/adoption/addAdoptionForm/' + getPet.petId}">Adopt</a>
+                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8080/medications/add/' + getPet.petId}">Add a medication</a>
+                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8080/conditions/add/' + getPet.petId}">Add a condition</a>
+                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8080/vaccinations/add/' + getPet.petId}">Add a vaccination</a>
+                        <a class="btn btn-subnav" th:if="${getPet.owner.userId == loggedInUser}" th:href="${'http://' + @environment.getProperty('docker.application.ip') + ':8080/veterinaryvisits/add/' + getPet.petId}">Add a veterinary visit</a>
                     </div>
                     <div class="contentPage">
                         <h4 th:text="${'Pet Health Overview'}"></h4>

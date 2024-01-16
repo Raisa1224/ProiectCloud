@@ -7,6 +7,7 @@ import com.health.service.PetVeterinaryVisitsService;
 import com.health.service.RedisService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,8 @@ public class PetVeterinaryVisitsController {
 
     @Autowired
     RedisService redisService;
-
+    @Value("${docker.application.ip}")
+    public  String ip;
     @GetMapping("BE/{petId}")
     public ResponseEntity<List<PetVeterinaryVisits>> getAllVisitsForASpecificPet(@PathVariable Integer petId){
         List<PetVeterinaryVisits> petVeterinaryVisitsList = petVeterinaryVisitsService.getAllVisitsForPet(petId);
@@ -57,9 +59,9 @@ public class PetVeterinaryVisitsController {
         if(ownerId!=loggedInUser){
             logged = false;
         }
-
+        String health_url = Constants.HEALTH_BASE_URL_part_1 + ip + Constants.HEALTH_BASE_URL_PART_2;
         model.addAttribute("visits", petVeterinaryVisits);
-        model.addAttribute("HEALTH", Constants.HEALTH_BASE_URL);
+        model.addAttribute("HEALTH", health_url);
         model.addAttribute("loggedInUser", logged);
 
         return "getAllPetVeterinaryVisitsForPet";
@@ -87,7 +89,7 @@ public class PetVeterinaryVisitsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "addPetVeterinaryVisit";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVeterinaryVisits.getPet().getPetId() ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petVeterinaryVisits.getPet().getPetId() ;
     }
 
     @PatchMapping("/editBE/{visitId}")
@@ -124,13 +126,13 @@ public class PetVeterinaryVisitsController {
             bindingResult.reject("globalError", exception.getMessage());
             return "editPetVeterinaryVisit";
         }
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petVeterinaryVisits.getPet().getPetId() ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petVeterinaryVisits.getPet().getPetId() ;
 
     }
 
     @RequestMapping("/delete/{visitId}")
     public String deleteVeterinaryVisit(@PathVariable Integer visitId){
         Integer petId = petVeterinaryVisitsService.deleteVisit(visitId);
-        return "redirect:" + Constants.PETS_BASE_URL + Constants.GET_PET_BY_ID_URL + petId ;
+        return "redirect:" + Constants.PETS_BASE_URL_PART_1 + ip + Constants.PETS_BASE_URL_PART_2 + Constants.GET_PET_BY_ID_URL + petId ;
     }
 }
